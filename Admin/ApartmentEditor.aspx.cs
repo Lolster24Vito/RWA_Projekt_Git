@@ -25,7 +25,7 @@ namespace Admin
 
         private const string PICPATH = "/Content/Pictures/";
 
-
+        private bool IsApartmentTaken;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -63,7 +63,12 @@ namespace Admin
                 RebindStatuses();
                 RebindTags();
                 RebindUsers();
+                DivReservedUser.Visible = false;
 
+            }
+            if (IsPostBack)
+            {
+               
             }
         }
 
@@ -294,6 +299,21 @@ namespace Admin
         public static List<ApartmentPicture> GetPictures()
         {
             return ApartmentPictures;
+        }
+
+        protected void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlStatus.SelectedIndex == 1 || ddlStatus.SelectedIndex == 2)
+            {
+                IsApartmentTaken = true;
+            }
+            else
+            {
+                IsApartmentTaken = false;
+
+
+            }
+                DivReservedUser.Visible = IsApartmentTaken;
         }
     }
 }
