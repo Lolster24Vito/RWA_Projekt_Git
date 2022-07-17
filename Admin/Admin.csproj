@@ -128,6 +128,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="TagAdd.aspx" />
+    <Content Include="TagDelete.aspx" />
     <Content Include="TagList.aspx" />
     <Content Include="Test.aspx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -224,6 +226,20 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="TagAdd.aspx.cs">
+      <DependentUpon>TagAdd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TagAdd.aspx.designer.cs">
+      <DependentUpon>TagAdd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TagDelete.aspx.cs">
+      <DependentUpon>TagDelete.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TagDelete.aspx.designer.cs">
+      <DependentUpon>TagDelete.aspx</DependentUpon>
     </Compile>
     <Compile Include="TagList.aspx.cs">
       <DependentUpon>TagList.aspx</DependentUpon>

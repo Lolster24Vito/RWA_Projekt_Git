@@ -18,6 +18,7 @@ namespace Admin
         private readonly ApartmentOwnerRepository _apartmentOwnerRepository = new ApartmentOwnerRepository();
         private readonly TagRepository _tagRepository = new TagRepository();
         private readonly ApartmentRepository _apartmentRepository = new ApartmentRepository();
+        private readonly UserRepository _userRepository=new UserRepository();
 
         public List<Tag> Tags { get; set; }
         public static List<ApartmentPicture> ApartmentPictures { get; set; }
@@ -61,8 +62,17 @@ namespace Admin
                 RebindCities();
                 RebindStatuses();
                 RebindTags();
+                RebindUsers();
 
             }
+        }
+
+        private void RebindUsers()
+        {
+            lbUsers.DataSource =_userRepository.GetUsers();
+            lbUsers.DataValueField = "Id";
+            lbUsers.DataTextField = "UserName";
+            lbUsers.DataBind();
         }
 
         private void SetExistingApartment(Apartment apartment)

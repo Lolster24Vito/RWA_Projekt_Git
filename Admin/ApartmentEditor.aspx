@@ -12,6 +12,15 @@
                 <label>Status</label>
                 <asp:DropDownList ID="ddlStatus" DataValueField="Id" DataTextField="Name" runat="server" CssClass="form-control"></asp:DropDownList>
             </div>
+            
+            <div class="form-group">
+                <label>Registrirani korisnici</label>
+                <asp:CheckBox
+                <asp:ListBox ID="lbUsers" runat="server"
+                            CssClass="form-control"/></asp:ListBox>
+            </div>
+
+
             <div class="form-group">
                 <label>Naziv</label>
                 <asp:TextBox ID="tbName" runat="server" CssClass="form-control"></asp:TextBox>

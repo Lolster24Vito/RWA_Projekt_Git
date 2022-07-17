@@ -11,25 +11,34 @@ namespace Admin
 {
 
 
-    public partial class TagList
+    public partial class TagDelete
     {
 
         /// <summary>
-        /// repTags control.
+        /// lblTagName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repTags;
+        protected global::System.Web.UI.WebControls.Label lblTagName;
 
         /// <summary>
-        /// lbTagAdd control.
+        /// lbConfirmDelete control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbTagAdd;
+        protected global::System.Web.UI.WebControls.LinkButton lbConfirmDelete;
+
+        /// <summary>
+        /// lbBack control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbBack;
     }
 }

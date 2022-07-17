@@ -18,14 +18,34 @@ namespace Admin
         {
             if (!IsPostBack)
             {
-               var tags = _tagRepository.GetTagsDdl();
+               var tags = _tagRepository.GetTags();
                 foreach (var tag in tags)
                 {
-                    tagList.Add(new TagCount { Id = tag.Id,Name=tag.Name, Count = _tagRepository.GetTagCount(tag.Id) });
+                    tagList.Add(new TagCount { Id = tag.Id, Name = tag.Name, Count = _tagRepository.GetTagCount(tag.Id) });
                 }
                 repTags.DataSource=tagList;
                 repTags.DataBind();
             }
+        }
+
+        protected void repTags_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            RepeaterItem ri = e.Item;
+            if (ri.DataItem != null)
+            {
+
+            var dataItem = ri.DataItem as TagCount;
+            var link = ri.FindControl("hlDelete") as HyperLink;
+            link.Visible = dataItem.Count <= 0;
+            }
+
+
+        }
+
+        protected void lbTagAdd_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("TagAdd.aspx");
+
         }
     }
 }

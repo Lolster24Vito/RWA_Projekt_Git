@@ -12,7 +12,5 @@ namespace Admin.Models
         public string Name { get; set; }
         public int Count { get; set; }
 
-        public bool Visible { get => Count > 0; }
-
     }
 }
