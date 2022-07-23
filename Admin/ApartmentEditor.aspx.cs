@@ -63,7 +63,7 @@ namespace Admin
                 RebindStatuses();
                 RebindTags();
                 RebindUsers();
-                DivReservedUser.Visible = false;
+                ReservedUserShowHide();
 
             }
             if (IsPostBack)
@@ -303,6 +303,10 @@ namespace Admin
 
         protected void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ReservedUserShowHide();
+        }
+        private void ReservedUserShowHide()
+        {
             if (ddlStatus.SelectedIndex == 1 || ddlStatus.SelectedIndex == 2)
             {
                 IsApartmentTaken = true;
@@ -313,7 +317,7 @@ namespace Admin
 
 
             }
-                DivReservedUser.Visible = IsApartmentTaken;
+            DivReservedUser.Visible = IsApartmentTaken;
         }
     }
 }

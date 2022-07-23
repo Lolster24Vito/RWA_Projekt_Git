@@ -7,15 +7,56 @@
             <div class="form-group">
                 <label>Vlasnik</label>
                 <asp:DropDownList ID="ddlApartmentOwner" DataValueField="Id" DataTextField="Name" runat="server" AutoPostBack="true"
-                    CssClass="form-control"></asp:DropDownList>
+                    CssClass="form-control">
+                </asp:DropDownList>
             </div>
 
             <div class="form-group">
                 <label>Status</label>
-                <asp:DropDownList ID="ddlStatus" DataValueField="Id" DataTextField="Name" runat="server" 
-                    CssClass="form-control"  AutoPostBack="true" OnSelectedIndexChanged="ddlStatus_SelectedIndexChanged"
-                    ></asp:DropDownList>
+                <asp:DropDownList ID="ddlStatus" DataValueField="Id" DataTextField="Name" runat="server"
+                    CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlStatus_SelectedIndexChanged">
+                </asp:DropDownList>
             </div>
+
+            <!-- Reserved  user--->
+            <div class="thumbnail" id="DivReservedUser" runat="server">
+
+                <h3>Rezervirano na osobu:</h3>
+                <div class="form-group">
+                    <label>Registrirani korisnici</label>
+                    <asp:CheckBox ID="CheckBox1" runat="server" />
+                    <asp:ListBox ID="lbUsers" runat="server"
+                        CssClass="form-control" />
+                </div>
+
+                <div class="list-group">
+                    <label>Neregistrirani korisnik:</label>
+                    <br />
+                    <div class="list-group-item">
+                        <label>Naziv:</label>
+                        <asp:TextBox ID="tbUserName" runat="server" CssClass="form-control"></asp:TextBox>
+
+                        <label>Email:</label>
+                        <asp:TextBox ID="tbUserEmail" runat="server" CssClass="form-control" TextMode="Email"></asp:TextBox>
+
+                        <label>Telefon:</label>
+                        <asp:TextBox ID="tbUserPhone" runat="server" CssClass="form-control" TextMode="Phone"></asp:TextBox>
+
+                        <label>Adresa:</label>
+                        <asp:TextBox ID="tbAdress" runat="server" CssClass="form-control"></asp:TextBox>
+
+                        <label>Detalji:</label>
+                        <asp:TextBox ID="tbDetails" runat="server" CssClass="form-control" TextMode="MultiLine"></asp:TextBox>
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+
+
 
 
 
@@ -135,41 +176,7 @@
         </div>
 
 
-        <div class="col-md-6 header" id="DivReservedUser" runat="server">
 
-            <h3>Rezervirano na osobu:</h3>
-        <div class="form-group">
-            <label>Registrirani korisnici</label>
-            <asp:CheckBox ID="CheckBox1" runat="server" />
-            <asp:ListBox ID="lbUsers" runat="server"
-                CssClass="form-control" /></asp:ListBox>
-        </div>
-        
-        <div class="list-group">
-            <label>Neregistrirani korisnik:</label> <br />
-            <div class="list-group-item">
-                <label>Naziv:</label>
-                <asp:TextBox ID="tbUserName" runat="server" CssClass="form-control"></asp:TextBox>
-
-                <label>Email:</label>
-            <asp:TextBox ID="tbUserEmail" runat="server" CssClass="form-control" TextMode="Email" ></asp:TextBox>
-                
-                <label>Telefon:</label>
-            <asp:TextBox ID="tbUserPhone" runat="server" CssClass="form-control" TextMode="Phone"></asp:TextBox>
-
-                <label>Adresa:</label>
-            <asp:TextBox ID="tbAdress" runat="server" CssClass="form-control" ></asp:TextBox>
-
-                <label>Detalji:</label>
-            <asp:TextBox ID="tbDetails" runat="server" CssClass="form-control" TextMode="MultiLine"  ></asp:TextBox>
-            </div>
-
-            </div>
-            
-
-
-
-        </div>
 
         <!--  Tag repeater -->
 
@@ -245,7 +252,6 @@
                             }
                         });
                     })
-                </script>
                 </script>
             </div>
         </div>
