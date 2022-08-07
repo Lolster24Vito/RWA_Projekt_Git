@@ -1,7 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TagAdd.aspx.cs" Inherits="Admin.TagAdd" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
+    <div class="alert alert-danger" id="ErrorMessage" role="alert" runat="server" visible="false">
+ 
+</div>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">

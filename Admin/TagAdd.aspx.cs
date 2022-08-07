@@ -32,7 +32,15 @@ namespace Admin
         {
             string tagName = tbName.Text;
             string tagEngName = tbNameEng.Text;
-            _tagRepository.CreateTag(tagName, tagEngName,ddlTagType.SelectedIndex);
+            if (string.IsNullOrWhiteSpace(tagName) || string.IsNullOrWhiteSpace(tagEngName))
+            {
+                ErrorMessage.Visible = true;
+                ErrorMessage.InnerText = "Molim vas popunite sve vrijednosti";
+                return;
+            }
+            ErrorMessage.Visible = false;
+
+            _tagRepository.CreateTag(tagName, tagEngName,ddlTagType.SelectedIndex+1);
             Response.Redirect($"TagList.aspx");
 
         }

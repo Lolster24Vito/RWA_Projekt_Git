@@ -14,12 +14,17 @@
 
     <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
-        <!-- CUSTOM CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <!-- CUSTOM CSS -->
     <style>
-       body {
-  padding-top: 90px;
-}
+        body {
+            padding-top: 90px;
+
+            min-height:100vh;
+            margin-bottom:155px;
+        }
+        footer{
+        }
     </style>
 
 </head>
@@ -45,7 +50,7 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <div class="navbar navbar-inverse navbar-fixed-top ">
+        <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #27285C;">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -53,18 +58,25 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" runat="server" href="~/">Application name</a>
+
+
+                    <a class="navbar-brand" style="padding: 0" runat="server" href="~/">
+                        <span>
+                            <img src="Content/Images/logo.png" style="height: 100%;" />
+                        </span>
+                        VITO APARTMANI admin
+                    </a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav  ">
                         <asp:Repeater ID="menu" DataSourceID="SiteMapDataSource1" runat="server">
-                        <itemtemplate>
-                            <li>
-                                <asp:HyperLink runat="server" NavigateUrl='<%# Eval("Url") %>'><%# Eval("Title") %></asp:HyperLink>
-                            </li>
-                        </itemtemplate>
-                            </asp:Repeater>
-                         <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" ShowStartingNode="false" />
+                            <ItemTemplate>
+                                <li>
+                                    <asp:HyperLink runat="server" Style="margin: 0px 30px;" NavigateUrl='<%# Eval("Url") %>'><%# Eval("Title") %> </asp:HyperLink>
+                                </li>
+                            </ItemTemplate>
+                        </asp:Repeater>
+                        <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" ShowStartingNode="false" />
 
                         <li class="">
                             <asp:LinkButton ID="lbLogout" OnClick="Logout" runat="server" Text="Logout" /></li>
@@ -72,16 +84,67 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </nav>
         <div class="container body-content " id="ContentHolder">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             <hr />
-            <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
-            </footer>
         </div>
 
+        <footer>
+
+          <nav class="navbar navbar-inverse navbar-fixed-bottom" style="background-color: #5D5FDE;">
+            <div class="container">
+                 <!--Grid row-->
+                <div class="row">
+   
+                   
+                    <!--Grid column-->
+                    <div class="col col-md-12 mb-4 mb-md-0">
+                                                
+                        <h5 class="text-uppercase mb-4">
+                            <span>
+                            <img src="Content/Images/logo.png" height="45px" />
+                        </span>
+                            About company</h5>
+
+                        <p>
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
+            voluptatum deleniti atque corrupti.
+                        </p>
+
+                        <p>
+                            Blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas
+            molestias.
+                        </p>
+
+                        <div class="mt-4">
+                            <!-- Facebook -->
+                            <a type="button" class="btn btn-floating btn-warning btn-lg" href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                            <!-- Twitter -->
+                            <a type="button" class="btn btn-floating btn-warning btn-lg" href="https://twitter.com/Lolster24"><i class="fab fa-twitter"></i></a>
+                            <!-- Google + -->
+                            <a type="button" class="btn btn-floating btn-warning btn-lg" href="https://www.youtube.com/user/vitotito12/videos"><i class="fab fa-youtube"></i></a>
+                            <a type="button" class="btn btn-floating btn-warning btn-lg" href="https://www.instagram.com/" ><i class="fab fa-instagram"></i></a>
+                            <a type="button" class="btn btn-floating btn-warning btn-lg" href="https://www.bluetooth.com/" ><i class="fab fa-bluetooth"></i></a>
+                            <!-- Linkedin -->
+                        </div>
+                    </div>
+                    <!--Grid column-->
+
+
+
+
+                </div>
+                <!--Grid row-->
+                           
+            </div>
+               <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                &copy; <%: DateTime.Now.Year %> - COPYRIGHT VITO APARTMANI
+            </div>
+        </nav>
+
+        </footer>
     </form>
 </body>
 </html>

@@ -37,8 +37,8 @@ namespace RWADatabaseLibrary.Repository
         {
             var commandParameters = new List<SqlParameter>();
             commandParameters.Add(new SqlParameter("guid", Guid.NewGuid()));
-            commandParameters.Add(new SqlParameter("Name", tagName));
-            commandParameters.Add(new SqlParameter("NameEng", tagEngName));
+            commandParameters.Add(new SqlParameter("name", tagName));
+            commandParameters.Add(new SqlParameter("nameEng", tagEngName));
             commandParameters.Add(new SqlParameter("TypeId", tagType));
 
 

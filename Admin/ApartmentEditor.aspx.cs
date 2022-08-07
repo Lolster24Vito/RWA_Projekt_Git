@@ -18,14 +18,13 @@ namespace Admin
         private readonly ApartmentOwnerRepository _apartmentOwnerRepository = new ApartmentOwnerRepository();
         private readonly TagRepository _tagRepository = new TagRepository();
         private readonly ApartmentRepository _apartmentRepository = new ApartmentRepository();
-        private readonly UserRepository _userRepository=new UserRepository();
 
         public List<Tag> Tags { get; set; }
         public static List<ApartmentPicture> ApartmentPictures { get; set; }
 
         private const string PICPATH = "/Content/Pictures/";
 
-        private bool IsApartmentTaken;
+        private bool IsApartmentExisting;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -43,6 +42,7 @@ namespace Admin
 
                 if (id.HasValue)
                 {
+
                     var dbApartment = _apartmentRepository.GetApartment(id.Value);
                     dbApartment.Tags = _apartmentRepository.GetApartmentTags(id.Value);
                     dbApartment.ApartmentPictures = _apartmentRepository.GetApartmentPictures(id.Value);
@@ -50,8 +50,12 @@ namespace Admin
                     {
                         dbApartment.ApartmentPictures[i].Path = Path.Combine(PICPATH, dbApartment.ApartmentPictures[i].Path);
                     }
-
+                    IsApartmentExisting = true;
                     SetExistingApartment(dbApartment);
+                }
+                else
+                {
+                    IsApartmentExisting=false;
                 }
 
 
@@ -62,8 +66,6 @@ namespace Admin
                 RebindCities();
                 RebindStatuses();
                 RebindTags();
-                RebindUsers();
-                ReservedUserShowHide();
 
             }
             if (IsPostBack)
@@ -72,13 +74,7 @@ namespace Admin
             }
         }
 
-        private void RebindUsers()
-        {
-            lbUsers.DataSource =_userRepository.GetUsers();
-            lbUsers.DataValueField = "Id";
-            lbUsers.DataTextField = "UserName";
-            lbUsers.DataBind();
-        }
+
 
         private void SetExistingApartment(Apartment apartment)
         {
@@ -174,7 +170,23 @@ namespace Admin
             var apartmentPictures=files.Select(x=>ApartmentPicture.CreateApartmentFromPath(x)).ToList();
             bool isNewApartment = (Request.QueryString["id"] == null);
 
-            var apartment = GetFormApartment();
+            Apartment apartment = new Apartment() ;
+            try
+            {
+                apartment = GetFormApartment();
+               // if(apartment.this and that isnt in throw error) TODO  VITO
+
+                ErrorMessage.Visible=false;
+
+            }
+            catch (Exception)
+            {
+                ErrorMessage.InnerText = "Molim vas popunite sve vrijednosti";
+                ErrorMessage.Visible=true;
+                return;
+
+            }
+
             if (isNewApartment)
             {
                 apartment.ApartmentPictures = apartmentPictures;
@@ -301,23 +313,7 @@ namespace Admin
             return ApartmentPictures;
         }
 
-        protected void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ReservedUserShowHide();
-        }
-        private void ReservedUserShowHide()
-        {
-            if (ddlStatus.SelectedIndex == 1 || ddlStatus.SelectedIndex == 2)
-            {
-                IsApartmentTaken = true;
-            }
-            else
-            {
-                IsApartmentTaken = false;
 
 
-            }
-            DivReservedUser.Visible = IsApartmentTaken;
-        }
     }
 }

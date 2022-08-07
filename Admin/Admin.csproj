@@ -111,12 +111,15 @@
     <Content Include="ApartmentDelete.aspx" />
     <Content Include="ApartmentEditor.aspx" />
     <Content Include="ApartmentList.aspx" />
+    <Content Include="ApartmentReservationAdd.aspx" />
+    <Content Include="ApartmentReservationsList.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Site.css" />
-    <Content Include="Default.aspx" />
+    <Content Include="ErrorPage.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -131,7 +134,6 @@
     <Content Include="TagAdd.aspx" />
     <Content Include="TagDelete.aspx" />
     <Content Include="TagList.aspx" />
-    <Content Include="Test.aspx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Logon.aspx" />
     <Content Include="Scripts\bootstrap.js" />
@@ -192,14 +194,28 @@
     <Compile Include="ApartmentList.aspx.designer.cs">
       <DependentUpon>ApartmentList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
+    <Compile Include="ApartmentReservationAdd.aspx.cs">
+      <DependentUpon>ApartmentReservationAdd.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
+    <Compile Include="ApartmentReservationAdd.aspx.designer.cs">
+      <DependentUpon>ApartmentReservationAdd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ApartmentReservationsList.aspx.cs">
+      <DependentUpon>ApartmentReservationsList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ApartmentReservationsList.aspx.designer.cs">
+      <DependentUpon>ApartmentReservationsList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="ErrorPage.aspx.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ErrorPage.aspx.designer.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -211,6 +227,7 @@
     <Compile Include="Logon.aspx.designer.cs">
       <DependentUpon>Logon.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ApartmentReservationViewModel.cs" />
     <Compile Include="Models\TagCount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
@@ -261,13 +278,6 @@
     </Compile>
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Test.aspx.cs">
-      <DependentUpon>Test.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Test.aspx.designer.cs">
-      <DependentUpon>Test.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
