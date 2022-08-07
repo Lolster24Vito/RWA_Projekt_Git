@@ -25,7 +25,6 @@ namespace Javno.Models
             : base("apartments")
         {
         }
-        public DbSet<Apartment> Apartments { get; set; }
 
         public static ApplicationDbContext Create()
         {
