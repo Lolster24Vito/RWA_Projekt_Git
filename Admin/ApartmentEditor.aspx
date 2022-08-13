@@ -120,6 +120,7 @@
                             // getPicture(files);
 
                             console.log("HandleFileSelect json is running")
+                            $('#uplImageInfo').empty();
                             for (var i = 0; i < files.length; i++) {
                                 $span = $("<span class='label label-info'></span>").text(files[i].name);
                                 $('#uplImageInfo').append($span);

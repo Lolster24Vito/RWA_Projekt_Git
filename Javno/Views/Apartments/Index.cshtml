@@ -18,17 +18,27 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-default">Rooms</span>
             </div>
-            <input type="number" id="RoomsInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            <!--
+    <input type="number" id="RoomsInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        -->
+            <!--     -->
+
+            @Html.EditorFor(model => model.Rooms, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "RoomsInput", @class = "form-control" } })
 
             <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-default">Adults</span>
             </div>
-            <input type="number" id="AdultsInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            <!--     <input type="number" id="AdultsInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+    -->
+            @Html.EditorFor(model => model.Adults, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "AdultsInput", @class = "form-control" } })
 
             <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-default">Children</span>
             </div>
+           <!--   
             <input type="number" id="ChildrenInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+               --> 
+            @Html.EditorFor(model => model.Children, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "ChildrenInput", @class = "form-control" } })
 
             <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-default">Destination</span>
@@ -38,81 +48,85 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-default">Sort by</span>
             </div>
-            @Html.DropDownListFor(m => m.OrderBy, new SelectList(Model.OrderBy,"Id","Name"), new { @id = "OrderByDropDown", @class = "form-control" })
+            @Html.DropDownListFor(m => m.OrderBy, new SelectList(Model.OrderBy, "Id", "Name"), new { @id = "OrderByDropDown", @class = "form-control" })
         </div>
-        <input type="button" value="Search" onclick="LoadData()">
+            <input type="button" value="Search" onclick="LoadData(true)">
 
 
-    </div>
+        </div>
 
-    <div id="apartmentList">
+        <div id="apartmentList">
 
-    </div>
+        </div>
 
-    @section Scripts{
-        <script type="text/javascript">
-             $(function () {
-        LoadData();
+        @section Scripts{
+            <script type="text/javascript">
+                $(function () {
+                    $("#DestinationValDropDown").val(@ViewBag.destination);
+                    $("#OrderByDropDown").val(@ViewBag.order);
+            LoadData(false);
 
-    });
-
-            function LoadData() {
-        //https://www.c-sharpcorner.com/blogs/using-ajax-in-asp-net-mvc
-                //https://www.pluralsight.com/guides/asp-net-mvc-using-ajax-helpers-with-razor-partial-views
-                //https://www.c-sharpcorner.com/article/asp-net-mvc-how-to-use-ajax-with-parameters/
-                var roomsVal = $("#RoomsInput").val();
-                var adultsVal = $("#AdultsInput").val();
-                var childrenVal = $("#ChildrenInput").val();
-                var destinationVal = $("#DestinationValDropDown").val();
-                if (destinationVal == 0) destinationVal = null;
-                var orderByVal = $("#OrderByDropDown").val();
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("searchApartments")',
-            dataType: 'json',
-            data: { rooms: roomsVal, adults: adultsVal, children: childrenVal, destination: destinationVal, order: orderByVal },
-            success: function (data) {
-                $('#apartmentList').empty();
-                var items = '';
-                $.each(data, function (i, item) {
-                    var ap = "<div class='card thumbnail' style = 'max-width: 500px ' ><div class='row'><div class='card-body'><div class='pull-right' style='padding:5px 30px'>";
-                    for (let i = 0; i < item.StarRating; i++) {
-                        ap += "<i class='fa fa-star '></i>"
-                    }
-                    for (let i = item.StarRating; i < 5; i++) {
-                        ap += "<i class='fa fa-star-o '></i>"
-                    }
-                    ap+="</div>"
-                    ap += "<div class='row g-0 '>        <div class='col-sm-5 '>";
-                    ap += "<img src ='" + item.RepresentativePictureBytes +"' class='card-img-top h-100 center-block text-center'width=170px style='max-width:170px;max-height:170px;' alt = '... ' >        </div > <div class='col-sm-7 '>";
-                    ap += "<h4 class='card-title'>" + item.Name + "</h4 >";
-                    ap += "<ul class='card-text'> <li>" + item.CityName + "</li >";
-                    ap += "<li>" + item.BeachDistance + "m from beach</li>";
-                    ap += "<li>" + item.TotalRooms + " rooms</li>";
-                    ap += "<li>" + item.MaxAdults + " adults</li>";
-                    ap += "<li>" + item.MaxChildren + " children</li>";
-                    ap += "</ul><h4 class='card-text'>" + item.Price + "€ </h4>";
-                    ///Apartments/Details/2001
-                   // <a class='btn btn-primary stretched-link' href='/Apartments/Details/2'>Reserve</a>
-                    ap += "<a href='/Apartments/Details/" + item.Id +"' class='btn btn-primary stretched-link' >Reserve</a>";
-                    var rows = "<p>" + item.Id + "</p>"
-                        + "<p>" + item.Name + "</p>"
-                        + "<p'>" + item.StarRating + "</p>"+"</br>";
-                    $('#apartmentList').append(ap);
-                });
-            },
-            error: function (ex) {
-                var r = jQuery.parseJSON(response.responseText);
-                alert("Message: " + r.Message);
-                alert("StackTrace: " + r.StackTrace);
-                alert("ExceptionType: " + r.ExceptionType);
-            }
         });
-        return false;
-    }
-        </script>
 
-                    }
+                function LoadData(cookieOption) {
+            //https://www.c-sharpcorner.com/blogs/using-ajax-in-asp-net-mvc
+                    //https://www.pluralsight.com/guides/asp-net-mvc-using-ajax-helpers-with-razor-partial-views
+                    //https://www.c-sharpcorner.com/article/asp-net-mvc-how-to-use-ajax-with-parameters/
+                    var roomsVal = $("#RoomsInput").val();
+                    var adultsVal = $("#AdultsInput").val();
+                    var childrenVal = $("#ChildrenInput").val();
+                    var destinationVal = $("#DestinationValDropDown").val();
+                    if (destinationVal == 0) destinationVal = null;
+                    var orderByVal = $("#OrderByDropDown").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("searchApartments")',
+                dataType: 'json',
+                data: { rooms: roomsVal, adults: adultsVal, children: childrenVal, destination: destinationVal, order: orderByVal, useCookie:cookieOption },
+                success: function (data) {
+                    $('#apartmentList').empty();
 
-</body >
-</html >
+
+                    var items = '';
+                    $.each(data, function (i, item) {
+                        var ap = "<div class='card thumbnail' style = 'max-width: 500px ' ><div class='row'><div class='card-body'><div class='pull-right' style='padding:5px 30px'>";
+                        for (let i = 0; i < item.StarRating; i++) {
+                            ap += "<i class='fa fa-star '></i>"
+                        }
+                        for (let i = item.StarRating; i < 5; i++) {
+                            ap += "<i class='fa fa-star-o '></i>"
+                        }
+                        ap+="</div>"
+                        ap += "<div class='row g-0 '>        <div class='col-sm-5 '>";
+                        ap += "<img src ='" + item.RepresentativePictureBytes +"' class='card-img-top h-100 center-block text-center'width=170px style='max-width:170px;max-height:170px;' alt = '... ' >        </div > <div class='col-sm-7 '>";
+                        ap += "<h4 class='card-title'>" + item.Name + "</h4 >";
+                        ap += "<ul class='card-text'> <li>" + item.CityName + "</li >";
+                        ap += "<li>" + item.BeachDistance + "m from beach</li>";
+                        ap += "<li>" + item.TotalRooms + " rooms</li>";
+                        ap += "<li>" + item.MaxAdults + " adults</li>";
+                        ap += "<li>" + item.MaxChildren + " children</li>";
+                        ap += "</ul><h4 class='card-text'>" + item.Price + "€ </h4>";
+                        ///Apartments/Details/2001
+                       // <a class='btn btn-primary stretched-link' href='/Apartments/Details/2'>Reserve</a>
+                        ap += "<a href='/Apartments/Details/" + item.Id +"' class='btn btn-primary stretched-link' >Reserve</a>";
+                        var rows = "<p>" + item.Id + "</p>"
+                            + "<p>" + item.Name + "</p>"
+                            + "<p'>" + item.StarRating + "</p>"+"</br>";
+                        $('#apartmentList').append(ap);
+                    });
+                },
+                error: function (ex) {
+                    var r = jQuery.parseJSON(response.responseText);
+                    alert("Message: " + r.Message);
+                    alert("StackTrace: " + r.StackTrace);
+                    alert("ExceptionType: " + r.ExceptionType);
+                }
+            });
+            return false;
+        }
+            </script>
+
+                        }
+
+    </body >
+    </html >

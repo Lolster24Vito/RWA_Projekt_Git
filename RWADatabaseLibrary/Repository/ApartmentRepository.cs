@@ -19,8 +19,8 @@ namespace RWADatabaseLibrary.Repository
 
         public List<ApartmentSearchViewModel> SearchApartments(int? rooms,int? adults,int? children, int? destination,int? order)
         {
-            string test3= AppDomain.CurrentDomain.BaseDirectory;
-            string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(test3))+"\\Admin\\";
+            string basedir= AppDomain.CurrentDomain.BaseDirectory;
+            string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(basedir))+"\\Admin\\";
            // uplImagesFolder = Path.GetFullPath(uplImagesRoot + PICPATH);
             var commandParameters = new List<SqlParameter>();
             if (rooms.HasValue)
@@ -80,15 +80,26 @@ namespace RWADatabaseLibrary.Repository
 
                 string fullPath = uplImagesRoot + ap.RepresentativePicturePath;
                 //TODO CHECK IF FILE EXISTS
-                if (File.Exists(fullPath))
-                {
 
-                byte[] byteData = System.IO.File.ReadAllBytes(fullPath);
-                string imreBase64Data = Convert.ToBase64String(byteData);
-                string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
-                ap.RepresentativePictureBytes= imgDataURL;
-                }
-                else
+               
+                    if (String.IsNullOrWhiteSpace(row["RepresentativePictureBytes"].ToString()))
+                    {
+                    if (File.Exists(fullPath))
+                    {
+
+                        byte[] byteData = System.IO.File.ReadAllBytes(fullPath);
+                        string imreBase64Data = Convert.ToBase64String(byteData);
+                        string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+                        SetApartmentPictureBase64(ap.RepresentativePicturePath,imreBase64Data);
+                        ap.RepresentativePictureBytes = imgDataURL;
+                    }
+                    }
+                    else
+                    {
+                        ap.RepresentativePictureBytes =string.Format("data:image/png;base64,{0}", row["RepresentativePictureBytes"].ToString());
+                    }
+                   
+                if(String.IsNullOrEmpty(ap.RepresentativePictureBytes))
                 {
                     ap.RepresentativePictureBytes = "\'\'";
                 }
@@ -157,6 +168,20 @@ namespace RWADatabaseLibrary.Repository
                 apList.Add(ap);
             }
             return apList;
+        }
+        public void SetApartmentPictureBase64(string path,string base64)
+        {
+            var commandParameters = new List<SqlParameter>();
+            commandParameters.Add(new SqlParameter("@path", path));
+            commandParameters.Add(new SqlParameter("@base64", base64));
+
+            SqlHelper.ExecuteNonQuery(
+                _connectionString,
+                CommandType.StoredProcedure,
+                "dbo.SetApartmentPictureBase64",
+                commandParameters.ToArray());
+
+
         }
         public void CreateApartment(Apartment apartment)
         {
@@ -371,6 +396,7 @@ namespace RWADatabaseLibrary.Repository
                     IsRepresentative = bool.Parse(row["IsRepresentative"].ToString())
                 });
             }
+
 
             return pics;
         }

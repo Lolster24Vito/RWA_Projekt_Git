@@ -15,7 +15,7 @@ namespace RWADatabaseLibrary.Models
         public bool IsRepresentative { get; set; }
         public bool DoDelete { get; set; }
 
-        public static ApartmentPicture CreateApartmentFromPath(string path,string base64)
+        public static ApartmentPicture CreateApartmentFromPath(string path)
         {
 
             return new ApartmentPicture

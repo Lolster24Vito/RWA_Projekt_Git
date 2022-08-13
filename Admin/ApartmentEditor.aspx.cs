@@ -177,7 +177,7 @@ namespace Admin
         protected void lblSave_Click(object sender, EventArgs e)
         {
             var files = SaveUploadedImagesToDisk();
-            var apartmentPictures=files.Select(x=>ApartmentPicture.CreateApartmentFromPath(x.Path,x.Base64)).ToList();
+            var apartmentPictures=files.Select(x=>ApartmentPicture.CreateApartmentFromPath(x)).ToList();
             bool isNewApartment = (Request.QueryString["id"] == null);
 
             Apartment apartment = new Apartment() ;
@@ -271,12 +271,12 @@ namespace Admin
 
         }
 
-        private List<PictureData> SaveUploadedImagesToDisk()
+        private List<string> SaveUploadedImagesToDisk()
         {
 
 
 
-            var files = new List<PictureData>();
+            var files = new List<string>();
 
             if (uplImages.HasFiles)
             {
@@ -290,9 +290,9 @@ namespace Admin
                 {
                     string uplImagePath = Path.Combine(uplImagesRoot, uploadedFile.FileName);
                     uploadedFile.SaveAs(uplImagePath);
-                    byte[] byteData = System.IO.File.ReadAllBytes(uplImagePath);
-                    string imreBase64Data = Convert.ToBase64String(byteData);
-                    files.Add(new PictureData{Path=uploadedFile.FileName,Base64=imreBase64Data);
+                    //byte[] byteData = System.IO.File.ReadAllBytes(uplImagePath);
+                   // string imreBase64Data = Convert.ToBase64String(byteData);
+                    files.Add(uploadedFile.FileName);
                 }
             }
             return files;
