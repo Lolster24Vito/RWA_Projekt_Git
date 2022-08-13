@@ -1,10 +1,12 @@
 ﻿using Microsoft.ApplicationBlocks.Data;
 using RWADatabaseLibrary.Models;
+using RWADatabaseLibrary.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +17,87 @@ namespace RWADatabaseLibrary.Repository
     {
         private static string _connectionString = ConfigurationManager.ConnectionStrings["apartments"].ConnectionString;
 
+        public List<ApartmentSearchViewModel> SearchApartments(int? rooms,int? adults,int? children, int? destination,int? order)
+        {
+            string test3= AppDomain.CurrentDomain.BaseDirectory;
+            string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(test3))+"\\Admin\\";
+           // uplImagesFolder = Path.GetFullPath(uplImagesRoot + PICPATH);
+            var commandParameters = new List<SqlParameter>();
+            if (rooms.HasValue)
+            {
+                commandParameters.Add(new SqlParameter("@rooms", rooms));
+            }
+            if (adults.HasValue)
+            {
+                commandParameters.Add(new SqlParameter("@adults", adults));
+            }
+            if (children.HasValue)
+            {
+                commandParameters.Add(new SqlParameter("@children", children));
+            }
+            if (destination.HasValue)
+            {
+                commandParameters.Add(new SqlParameter("@destination", destination));
+            }
+            if (order.HasValue)
+            {
+                commandParameters.Add(new SqlParameter("@order ", order));
+            }
+            var ds = SqlHelper.ExecuteDataset(
+            _connectionString,
+            CommandType.StoredProcedure,
+            "dbo.SearchApartments",
+            commandParameters.ToArray());
+
+            var apList = new List<ApartmentSearchViewModel>();
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+                var ap = new ApartmentSearchViewModel();
+                ap.Id = Convert.ToInt32(row["ID"]);
+                
+                ap.Name = row["Name"].ToString();
+               
+                ap.CityName = row["CityName"]?.ToString();
+               
+                ap.Price = Convert.ToDecimal(row["Price"]);
+                ap.MaxAdults =
+                row["MaxAdults"] != DBNull.Value ?
+                (int?)Convert.ToInt32(row["MaxAdults"]) :
+                null;
+                ap.MaxChildren =
+                row["MaxChildren"] != DBNull.Value ?
+                (int?)Convert.ToInt32(row["MaxChildren"]) :
+                null;
+                ap.TotalRooms =
+                row["TotalRooms"] != DBNull.Value ?
+                (int?)Convert.ToInt32(row["TotalRooms"]) :
+                null;
+                ap.BeachDistance =
+                row["BeachDistance"] != DBNull.Value ?
+                (int?)Convert.ToInt32(row["BeachDistance"]) :
+                null;
+                ap.RepresentativePicturePath= row["RepresentativePicturePath"].ToString();
+
+                string fullPath = uplImagesRoot + ap.RepresentativePicturePath;
+                //TODO CHECK IF FILE EXISTS
+                if (File.Exists(fullPath))
+                {
+
+                byte[] byteData = System.IO.File.ReadAllBytes(fullPath);
+                string imreBase64Data = Convert.ToBase64String(byteData);
+                string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+                ap.RepresentativePictureBytes= imgDataURL;
+                }
+                else
+                {
+                    ap.RepresentativePictureBytes = "\'\'";
+                }
+                // ap.RepresentativePictureBytes=
+                apList.Add(ap);
+            }
+            return apList;
+
+        }
 
         public List<Apartment> GetApartments(int? statusId, int? cityId, int? order)
         {

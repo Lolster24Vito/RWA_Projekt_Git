@@ -100,6 +100,7 @@
                         }
 
                         function OnSuccess(response) {
+                            alert(response);
                             var table = $("#imagesContainer li").eq(0).clone(true);
                             var imagePictures = response.d;
                             console.log(imagePictures);

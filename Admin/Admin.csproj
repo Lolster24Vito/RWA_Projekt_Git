@@ -235,6 +235,7 @@
       <DependentUpon>Logon.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\ApartmentReservationViewModel.cs" />
+    <Compile Include="Models\PictureData.cs" />
     <Compile Include="Models\TagCount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">

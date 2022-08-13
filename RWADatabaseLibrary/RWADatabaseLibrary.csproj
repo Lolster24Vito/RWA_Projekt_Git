@@ -56,6 +56,7 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Tag.cs" />
+    <Compile Include="Models\ViewModels\ApartmentSearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ApartmentOwnerRepository.cs" />
     <Compile Include="Repository\ApartmentRepository.cs" />

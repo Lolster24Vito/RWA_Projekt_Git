@@ -11,7 +11,7 @@ namespace Javno.Data
     public class AppDbContext: DbContext
     {
         public AppDbContext()
-           : base("AppDbContext")
+           : base("apartments")
         {
         }
         public DbSet<Apartment> Apartments { get; set; }

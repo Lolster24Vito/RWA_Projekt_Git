@@ -1,1 +1,42 @@
 ﻿
+@model RWADatabaseLibrary.Models.ViewModels.ApartmentSearchViewModel
+
+<div class='card thumbnail' style='max-width: 500px; '>
+    <div class='row '>
+        <div class='card-body'>
+            <div class='pull-right'style='padding:5px 30px'>
+                @for (var i = 0; i < Model.StarRating; i++)
+                {
+                    <i class='fa fa-star '></i>
+
+                }
+                @for (var i = Model.StarRating; i < 5; i++)
+                {
+
+                    <i class='fa fa-star-o '></i>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class='row g-0 '>
+        <div class='col-sm-5 '>
+            <img src='https://cdn.shopify.com/s/files/1/1288/2903/products/candy-corn_1024x1024.jpg ' height='150px ' class='card-img-top h-100 center-block ' alt='... '>
+        </div>
+        <div class='col-sm-7 '>
+
+            <h4 class='card-title'>@Model.Name</h4>
+            <ul class='card-text'>
+                <li>@Model.CityName</li>
+                <li><text>@Model.BeachDistance</text>m from beach</li>
+                <li>@Model.TotalRooms rooms</li>
+                <li>@Model.MaxAdults adults</li>
+                <li>@Model.MaxChildren children</li>
+                <li>@Model.StarRating rating</li>
+            </ul>
+            <h4 class='card-text'><text> @Model.Price.ToString("#.##")</text>€ </h4>
+            @Html.ActionLink("Reserve", "Details", new { id = Model.Id }, new { @class = "btn btn-primary stretched-link" })
+
+        </div>
+    </div>
+</div>

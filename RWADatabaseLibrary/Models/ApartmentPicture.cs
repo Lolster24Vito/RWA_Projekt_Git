@@ -15,12 +15,13 @@ namespace RWADatabaseLibrary.Models
         public bool IsRepresentative { get; set; }
         public bool DoDelete { get; set; }
 
-        public static ApartmentPicture CreateApartmentFromPath(string x)
+        public static ApartmentPicture CreateApartmentFromPath(string path,string base64)
         {
+
             return new ApartmentPicture
             {
-                Path = x,
-                Name =System.IO.Path.GetFileNameWithoutExtension(x),
+                Path = path,
+                Name =System.IO.Path.GetFileNameWithoutExtension(path),
                 IsRepresentative = false,
             };
         }

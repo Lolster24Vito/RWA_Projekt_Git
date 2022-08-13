@@ -1,4 +1,5 @@
-﻿using RWADatabaseLibrary.Models;
+﻿using Admin.Models;
+using RWADatabaseLibrary.Models;
 using RWADatabaseLibrary.Repository;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,15 @@ namespace Admin
         private bool IsApartmentExisting;
         protected void Page_Load(object sender, EventArgs e)
         {
+            //string uplImagesRoot = Server.MapPath(PICPATH);
+            string uplImagesRoot= Path.GetDirectoryName(Path.GetDirectoryName(Server.MapPath("~")));
+            string uplImagesFolder = Path.GetFullPath(uplImagesRoot + PICPATH);
+      //      string root = Server.MapPath("~");
+       //    string parent = Path.GetDirectoryName(root);
+       //     string grandParent = Path.GetDirectoryName(parent);
+            //  string testString =
+           //  string uplImagePath = Path.Combine(uplImagesRoot, uploadedFile.FileName);
+
             if (!IsPostBack)
             {
                 string qryStrId = Request.QueryString["id"];
@@ -167,7 +177,7 @@ namespace Admin
         protected void lblSave_Click(object sender, EventArgs e)
         {
             var files = SaveUploadedImagesToDisk();
-            var apartmentPictures=files.Select(x=>ApartmentPicture.CreateApartmentFromPath(x)).ToList();
+            var apartmentPictures=files.Select(x=>ApartmentPicture.CreateApartmentFromPath(x.Path,x.Base64)).ToList();
             bool isNewApartment = (Request.QueryString["id"] == null);
 
             Apartment apartment = new Apartment() ;
@@ -261,20 +271,28 @@ namespace Admin
 
         }
 
-        private List<string> SaveUploadedImagesToDisk()
+        private List<PictureData> SaveUploadedImagesToDisk()
         {
-            var files = new List<string>();
+
+
+
+            var files = new List<PictureData>();
 
             if (uplImages.HasFiles)
             {
-                var uplImagesRoot = Server.MapPath(PICPATH);
+                //NEW TODO
+                /*string uplImagesRootParent = Path.GetDirectoryName(Path.GetDirectoryName(Server.MapPath("~")));
+                string uplImagesRoot = Path.GetFullPath(uplImagesRootParent + PICPATH);*/
+                 var uplImagesRoot = Server.MapPath(PICPATH); //original
                 if (!Directory.Exists(uplImagesRoot))
                     Directory.CreateDirectory(uplImagesRoot);
                 foreach (var uploadedFile in uplImages.PostedFiles)
                 {
                     string uplImagePath = Path.Combine(uplImagesRoot, uploadedFile.FileName);
                     uploadedFile.SaveAs(uplImagePath);
-                    files.Add(uploadedFile.FileName);
+                    byte[] byteData = System.IO.File.ReadAllBytes(uplImagePath);
+                    string imreBase64Data = Convert.ToBase64String(byteData);
+                    files.Add(new PictureData{Path=uploadedFile.FileName,Base64=imreBase64Data);
                 }
             }
             return files;

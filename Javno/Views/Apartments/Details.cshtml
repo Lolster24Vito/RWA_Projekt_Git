@@ -1,0 +1,162 @@
+﻿@model RWADatabaseLibrary.Models.Apartment
+
+@{
+    
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>Apartment</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Guid)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Guid)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CreatedAt)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.DeletedAt)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.DeletedAt)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.OwnerId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.OwnerId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.OwnerName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.OwnerName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.TypeId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.TypeId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.StatusId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.StatusId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.StatusName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.StatusName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CityId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CityId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CityName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CityName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.MaxAdults)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.MaxAdults)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.MaxChildren)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.MaxChildren)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.TotalRooms)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.TotalRooms)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.BeachDistance)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.BeachDistance)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>
