@@ -1,0 +1,53 @@
+﻿@{
+
+}
+
+    <div id="dvCaptcha">
+    </div>
+    <input type="hidden" id="hfCaptcha" />
+    <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
+    <br />
+    <input type="button" id="btnSubmit" value="Submit" onclick="btnSubmitClick()" />
+
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+            async defer></script>
+    <script type="text/javascript">
+       function onloadCallback() {
+            grecaptcha.render('dvCaptcha', {
+                'sitekey': '6LfI9XYhAAAAAN_XhWtifbM4a0e_kYxVTpAToSQu',
+                'callback': function (response) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/CapTest/SubmitForm",
+                        data: { response: response },
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {
+                            alert("test");
+                            var captchaResponse = jQuery.parseJSON(r.Response);
+                            alert(captchaResponse);
+                            if (captchaResponse.success) {
+                                alert("suc");
+                                $("#hfCaptcha").val(captchaResponse.success);
+                                $("#rfvCaptcha").hide();
+                            } else {
+                                alert("fail");
+                                $("#hfCaptcha").val("");
+                                $("#rfvCaptcha").show();
+                                var error = captchaResponse["error-codes"][0];
+                                $("#rfvCaptcha").html("RECaptcha error. " + error);
+                            }
+                        }
+                    });
+                }
+            });
+        };
+        function btnSubmitClick() {
+            $("#rfvCaptcha").hide();
+            alert("dostuff");
+            if ($("#hfCaptcha").val() == "") {
+                $("#rfvCaptcha").show();
+            }
+        }
+
+    </script>

@@ -11,13 +11,17 @@ using Javno.Models.ViewModels;
 using RWADatabaseLibrary.Models;
 using RWADatabaseLibrary.Models.ViewModels;
 using RWADatabaseLibrary.Repository;
+using Microsoft.AspNet.Identity;
+using System.Web.Security;
 
 namespace Javno.Controllers
 {
     public class ApartmentsController : Controller
     {
         private ApartmentRepository _apartmentRepository = new ApartmentRepository();
+        private ApartmentReservationRepository _apartmentReservationRepository = new ApartmentReservationRepository();
         private CityRepository _cityRepository = new CityRepository();
+        private UserRepository _userRepository = new UserRepository();
 
         private bool firstTimeUse = false;
         // GET: Apartments
@@ -54,19 +58,68 @@ namespace Javno.Controllers
                 {
                     ViewBag.order = int.Parse(cookie["order"]);
                 }
-                /* if (cookie["City"] != null)
-                 {
-                     ddlCity.SelectedValue = cookie["City"];
-                 }
-                 if (cookie["Order"] != null)
-                 {
-                     ddlOrder.SelectedValue = cookie["Order"];
-                 }*/
             }
 
 
             return View(searchFiltersViewModel);
         }
+        public void createApartmentReview(int rating, string reviewDetails,int apartmentId)
+        {
+            //apartment repo
+            string currentUserID=User.Identity.GetUserId();
+            int currentUserIDInt=int.Parse(currentUserID);
+            ApartmentReview apartmentReview = new ApartmentReview
+            {
+                Guid = Guid.NewGuid(),
+                ApartmentId = apartmentId,
+                UserId = currentUserIDInt,
+                Details = reviewDetails,
+                Stars = rating
+            };
+            if (!String.IsNullOrWhiteSpace(currentUserID))
+            {
+                _apartmentRepository.CreateApartmentReview(apartmentReview);
+            }
+            else
+            {
+                //Throw error
+
+            }
+        }
+        public void createApartmentReservation(string name, string email, string phone,string details,string address, int apartmentId)
+        {
+            //apartment repo
+            string currentUserID = User.Identity.GetUserId();
+
+            int? currentUserIDInt = NullableParse(currentUserID);
+
+            ApartmentReservation apartmentReservation = new ApartmentReservation
+            {
+                Guid = Guid.NewGuid(),
+                ApartmentId = apartmentId,
+                Details = details,
+                UserId = currentUserIDInt,
+                UserName = name,
+                UserEmail = email,
+                UserPhone = phone,
+                UserAddress = address,
+            };
+
+            _apartmentReservationRepository.CreateApartmentReservation(apartmentReservation);
+            
+        }
+        private int? NullableParse(string input)
+        {
+            int output = 0;
+
+            if (!int.TryParse(input, out output))
+            {
+                return null;
+            }
+
+            return output;
+        }
+
         public JsonResult searchApartments(int? rooms, int? adults, int? children, int? destination, int? order,bool useCookie)
         {
             List<ApartmentSearchViewModel> apartments = new List<ApartmentSearchViewModel>();
@@ -103,14 +156,45 @@ namespace Javno.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            string captchaResponse = Request["g-recaptcha-response"];
+            if (captchaResponse != null && string.IsNullOrWhiteSpace(captchaResponse))
+            {
+                //Captha not checked show error in server
+            }
+            
+            ApartmentDetailsViewModel viewModel = new ApartmentDetailsViewModel();
+            AspNetUser currentUser;
+            if (User.Identity.IsAuthenticated)
+            {
+                currentUser = _userRepository.GetUser(int.Parse(User.Identity.GetUserId()));
+                viewModel.User = currentUser;
+            }
+
             Apartment apartment = _apartmentRepository.GetApartment(id.Value);
+            apartment.Tags = _apartmentRepository.GetApartmentTags(id.Value);
+            apartment.ApartmentReviews = _apartmentRepository.GetApartmentReviews(id.Value);
+
+            viewModel.Apartment = apartment;
+           
+            //dbApartment.ApartmentPictures = _apartmentRepository.GetApartmentPictures(id.Value);
             if (apartment == null)
             {
                 return HttpNotFound();
             }
-            return View(apartment);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public JsonResult AjaxMethod(string response)
+        {
+            string url = "https://www.google.com/recaptcha/api/siteverify?secret=" + "6LfI9XYhAAAAAAU7-ys6LzivfAEiWae_ojzthjtT" + "&response=" + response;
+            string responseStr = (new WebClient()).DownloadString(url);
+            return Json(responseStr);
         }
 
 
+
     }
+
 }

@@ -16,5 +16,6 @@ namespace Javno.Data
         }
         public DbSet<Apartment> Apartments { get; set; }
 
+        public System.Data.Entity.DbSet<RWADatabaseLibrary.Models.ApartmentReservation> ApartmentReservations { get; set; }
     }
 }

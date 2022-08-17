@@ -1,0 +1,58 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript"
+            src='https://www.google.com/recaptcha/api.js'></script>
+
+    <script type="text/javascript">
+        var captcharesponse = grecaptcha.getResponse();
+
+
+        $.ajax({
+            type: "POST",
+            url: @Url.Action("AjaxMethod"),
+            data: "{captcharesponse:" + JSON.stringify(captcharesponse) + "}",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+
+                if (response.Success == true) {
+                    alert("success");
+
+                } else {
+                    alert("failed");
+
+                }
+
+            },
+            error: function (err) {
+                commonError(err);
+            }
+        });
+            }
+    </script>
+
+    <div class="g-recaptcha"
+         data-sitekey="6LfI9XYhAAAAAN_XhWtifbM4a0e_kYxVTpAToSQu"></div>
+    <br />
+    <input type="button" value="Submit" onclick="createUser();" style="margin-right:300px;" />
+</body>
+</html>

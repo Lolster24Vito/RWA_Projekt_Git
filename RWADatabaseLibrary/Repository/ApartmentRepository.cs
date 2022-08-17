@@ -77,6 +77,9 @@ namespace RWADatabaseLibrary.Repository
                 (int?)Convert.ToInt32(row["BeachDistance"]) :
                 null;
                 ap.RepresentativePicturePath= row["RepresentativePicturePath"].ToString();
+                ap.StarRating = row["StarRating"] != DBNull.Value ?
+                (int)Convert.ToInt32(row["StarRating"]) :
+                0;
 
                 string fullPath = uplImagesRoot + ap.RepresentativePicturePath;
                 //TODO CHECK IF FILE EXISTS
@@ -109,6 +112,52 @@ namespace RWADatabaseLibrary.Repository
             return apList;
 
         }
+
+        public List<ApartmentReview> GetApartmentReviews(int id)
+        {
+            var commandParameters = new List<SqlParameter>();
+            commandParameters.Add(new SqlParameter("@ApartmentId", id));
+            var ds = SqlHelper.ExecuteDataset(
+             _connectionString,
+             CommandType.StoredProcedure,
+             "dbo.GetApartmentStarRating",
+             commandParameters.ToArray());
+
+            var reviewList = new List<ApartmentReview>();
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+                var ap = new ApartmentReview();
+                ap.Id = Convert.ToInt32(row["ID"]);
+                ap.Guid = Guid.Parse(row["Guid"].ToString());
+                ap.CreatedAt = Convert.ToDateTime(row["CreatedAt"]);
+                
+                ap.ApartmentId = Convert.ToInt32(row["ApartmentId"]);
+                ap.UserId = Convert.ToInt32(row["UserId"]);
+                ap.Details=row["Details"]?.ToString();
+                ap.Stars= Convert.ToInt32(row["Stars"]);
+                ap.Username= row["UserName"].ToString();
+
+                reviewList.Add(ap);
+            }
+            return reviewList;
+        }
+        public void CreateApartmentReview(ApartmentReview apReview)
+        {
+            var commandParameters = new List<SqlParameter>();
+            commandParameters.Add(new SqlParameter("@guid", apReview.Guid));
+            commandParameters.Add(new SqlParameter("@ApartmentId", apReview.ApartmentId));
+            commandParameters.Add(new SqlParameter("@UserId", apReview.UserId));
+            commandParameters.Add(new SqlParameter("@Details", apReview.Details));
+            commandParameters.Add(new SqlParameter("@Stars", apReview.Stars));
+
+            SqlHelper.ExecuteNonQuery(
+             _connectionString,
+             CommandType.StoredProcedure,
+             "dbo.CreateApartmentReview",
+             commandParameters.ToArray());
+
+        }
+
 
         public List<Apartment> GetApartments(int? statusId, int? cityId, int? order)
         {

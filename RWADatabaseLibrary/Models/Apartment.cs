@@ -29,6 +29,8 @@ namespace RWADatabaseLibrary.Models
         public List<Tag> Tags { get; set; }
         public List<ApartmentPicture> ApartmentPictures { get; set; }
 
+        public List<ApartmentReview> ApartmentReviews { get; set; }
+
     }
 
 }

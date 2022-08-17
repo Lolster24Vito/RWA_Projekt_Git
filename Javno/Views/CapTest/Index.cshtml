@@ -1,0 +1,51 @@
+﻿@model Javno.Models.ViewModels.ContactReservationViewModel
+@using Recaptcha.Web.Mvc
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="https://www.google.com/recaptcha/api.js?render=6LfI9XYhAAAAAN_XhWtifbM4a0e_kYxVTpAToSQu"></script>
+
+<h2>Kontaktirajte nas za rezervaciju</h2>
+
+@using (Html.BeginForm("Index", "Apartment", "POST"))
+{
+    <div class="form-group">
+        @Html.LabelFor(x => x.UserName)
+        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.UserEmail)
+        @Html.TextBoxFor(x => x.UserEmail, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.UserPhone)
+        @Html.TextBoxFor(x => x.UserPhone, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.UserAddress)
+        @Html.TextBoxFor(x => x.UserAddress, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.NumberOfAdults)
+        @Html.TextBoxFor(x => x.NumberOfAdults,
+          new { @class = "form-control", @type = "number" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.NumberOfChildren)
+        @Html.TextBoxFor(x => x.NumberOfChildren,
+          new { @class = "form-control", @type = "number" })
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    @Html.RecaptchaWidget() 
+    if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            @Html.ValidationSummary()
+        </div>
+    }
+}

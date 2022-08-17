@@ -6,7 +6,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html >
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
@@ -19,8 +19,8 @@
                 <span class="input-group-text" id="inputGroup-sizing-default">Rooms</span>
             </div>
             <!--
-    <input type="number" id="RoomsInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-        -->
+            <input type="number" id="RoomsInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                -->
             <!--     -->
 
             @Html.EditorFor(model => model.Rooms, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "RoomsInput", @class = "form-control" } })
@@ -29,15 +29,15 @@
                 <span class="input-group-text" id="inputGroup-sizing-default">Adults</span>
             </div>
             <!--     <input type="number" id="AdultsInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-    -->
+            -->
             @Html.EditorFor(model => model.Adults, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "AdultsInput", @class = "form-control" } })
 
             <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-default">Children</span>
             </div>
-           <!--   
-            <input type="number" id="ChildrenInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-               --> 
+            <!--
+             <input type="number" id="ChildrenInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                -->
             @Html.EditorFor(model => model.Children, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "ChildrenInput", @class = "form-control" } })
 
             <div class="input-group-prepend">
@@ -50,17 +50,20 @@
             </div>
             @Html.DropDownListFor(m => m.OrderBy, new SelectList(Model.OrderBy, "Id", "Name"), new { @id = "OrderByDropDown", @class = "form-control" })
         </div>
-            <input type="button" value="Search" onclick="LoadData(true)">
+        <input type="button" value="Search" onclick="LoadData(true)">
 
 
-        </div>
+    </div>
 
-        <div id="apartmentList">
 
-        </div>
 
-        @section Scripts{
-            <script type="text/javascript">
+
+    <div id="apartmentList">
+
+    </div>
+
+    @section Scripts{
+        <script type="text/javascript">
                 $(function () {
                     $("#DestinationValDropDown").val(@ViewBag.destination);
                     $("#OrderByDropDown").val(@ViewBag.order);
@@ -86,10 +89,18 @@
                 success: function (data) {
                     $('#apartmentList').empty();
 
+                    $('#apartmentList').append("<div id='PicRow' class='row'> </div>");
+
+
 
                     var items = '';
                     $.each(data, function (i, item) {
-                        var ap = "<div class='card thumbnail' style = 'max-width: 500px ' ><div class='row'><div class='card-body'><div class='pull-right' style='padding:5px 30px'>";
+                        var ap = "<div class='col-md-4'>";
+                        //if (i == 0) ap += "<div class='row'>";
+                      //  if (i > 0 && i % 2 == 0) {
+                      //      ap += "</div><div class='row'>"
+                      //  }
+                        ap += "<div class='card thumbnail' style = 'max-width: 400px; ' ><div class='card-body'><div class='col-sm'> <div class='pull-right' style='padding:5px 30px'>";
                         for (let i = 0; i < item.StarRating; i++) {
                             ap += "<i class='fa fa-star '></i>"
                         }
@@ -98,21 +109,21 @@
                         }
                         ap+="</div>"
                         ap += "<div class='row g-0 '>        <div class='col-sm-5 '>";
-                        ap += "<img src ='" + item.RepresentativePictureBytes +"' class='card-img-top h-100 center-block text-center'width=170px style='max-width:170px;max-height:170px;' alt = '... ' >        </div > <div class='col-sm-7 '>";
                         ap += "<h4 class='card-title'>" + item.Name + "</h4 >";
+                        ap += "<img src ='" + item.RepresentativePictureBytes +"' class='card-img-top h-100 center-block text-center'width=170px style='max-width:170px;max-height:170px;' alt = '... ' >        </div > <div class='col-sm-7 pull-right'>";
                         ap += "<ul class='card-text'> <li>" + item.CityName + "</li >";
                         ap += "<li>" + item.BeachDistance + "m from beach</li>";
                         ap += "<li>" + item.TotalRooms + " rooms</li>";
                         ap += "<li>" + item.MaxAdults + " adults</li>";
                         ap += "<li>" + item.MaxChildren + " children</li>";
-                        ap += "</ul><h4 class='card-text'>" + item.Price + "€ </h4>";
+                        ap += "</ul><h4 class='card-text' style='margin-left:30px;'>" + item.Price + "€ </h4>";
                         ///Apartments/Details/2001
                        // <a class='btn btn-primary stretched-link' href='/Apartments/Details/2'>Reserve</a>
-                        ap += "<a href='/Apartments/Details/" + item.Id +"' class='btn btn-primary stretched-link' >Reserve</a>";
-                        var rows = "<p>" + item.Id + "</p>"
-                            + "<p>" + item.Name + "</p>"
-                            + "<p'>" + item.StarRating + "</p>"+"</br>";
-                        $('#apartmentList').append(ap);
+                        ap += "<a href='/Apartments/Details/" + item.Id +"' class='btn btn-primary stretched-link' style='margin-left:30px;' >Reserve</a>"+"</div>";
+                       
+                   
+                       
+                        $('#PicRow').append(ap);
                     });
                 },
                 error: function (ex) {
@@ -124,9 +135,9 @@
             });
             return false;
         }
-            </script>
+        </script>
 
-                        }
+    }
 
-    </body >
+</body>
     </html >

@@ -1,7 +1,7 @@
-﻿@model RWADatabaseLibrary.Models.Apartment
+﻿@model Javno.Models.ViewModels.ApartmentDetailsViewModel
 
 @{
-    
+
 }
 
 <!DOCTYPE html>
@@ -17,145 +17,341 @@
         <hr />
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(model => model.Guid)
+                @Html.DisplayNameFor(model => model.Apartment.Guid)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.Guid)
+                @Html.DisplayFor(model => model.Apartment.Guid)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.CreatedAt)
+                @Html.DisplayNameFor(model => model.Apartment.CreatedAt)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.CreatedAt)
+                @Html.DisplayFor(model => model.Apartment.CreatedAt)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.DeletedAt)
+                @Html.DisplayNameFor(model => model.Apartment.DeletedAt)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.DeletedAt)
+                @Html.DisplayFor(model => model.Apartment.DeletedAt)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.OwnerId)
+                @Html.DisplayNameFor(model => model.Apartment.OwnerId)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.OwnerId)
+                @Html.DisplayFor(model => model.Apartment.OwnerId)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.OwnerName)
+                @Html.DisplayNameFor(model => model.Apartment.OwnerName)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.OwnerName)
+                @Html.DisplayFor(model => model.Apartment.OwnerName)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.TypeId)
+                @Html.DisplayNameFor(model => model.Apartment.TypeId)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.TypeId)
+                @Html.DisplayFor(model => model.Apartment.TypeId)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.StatusId)
+                @Html.DisplayNameFor(model => model.Apartment.StatusId)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.StatusId)
+                @Html.DisplayFor(model => model.Apartment.StatusId)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.StatusName)
+                @Html.DisplayNameFor(model => model.Apartment.StatusName)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.StatusName)
+                @Html.DisplayFor(model => model.Apartment.StatusName)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.CityId)
+                @Html.DisplayNameFor(model => model.Apartment.CityId)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.CityId)
+                @Html.DisplayFor(model => model.Apartment.CityId)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.CityName)
+                @Html.DisplayNameFor(model => model.Apartment.CityName)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.CityName)
+                @Html.DisplayFor(model => model.Apartment.CityName)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.Address)
+                @Html.DisplayNameFor(model => model.Apartment.Address)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.Address)
+                @Html.DisplayFor(model => model.Apartment.Address)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Apartment.Name)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.Name)
+                @Html.DisplayFor(model => model.Apartment.Name)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.Apartment.Price)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.Price)
+                @Html.DisplayFor(model => model.Apartment.Price)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.MaxAdults)
+                @Html.DisplayNameFor(model => model.Apartment.MaxAdults)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.MaxAdults)
+                @Html.DisplayFor(model => model.Apartment.MaxAdults)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.MaxChildren)
+                @Html.DisplayNameFor(model => model.Apartment.MaxChildren)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.MaxChildren)
+                @Html.DisplayFor(model => model.Apartment.MaxChildren)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.TotalRooms)
+                @Html.DisplayNameFor(model => model.Apartment.TotalRooms)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.TotalRooms)
+                @Html.DisplayFor(model => model.Apartment.TotalRooms)
             </dd>
-    
+
             <dt>
-                @Html.DisplayNameFor(model => model.BeachDistance)
+                @Html.DisplayNameFor(model => model.Apartment.BeachDistance)
             </dt>
-    
+
             <dd>
-                @Html.DisplayFor(model => model.BeachDistance)
+                @Html.DisplayFor(model => model.Apartment.BeachDistance)
             </dd>
-    
+            <dt>
+                @Html.DisplayNameFor(model => model.Apartment.Tags)
+            </dt>
+            @foreach (var tag in Model.Apartment.Tags)
+            {
+                <dd>
+                    @tag.Name
+                </dd>
+            }
+            <dt>
+                @Html.DisplayNameFor(model => model.Apartment.ApartmentReviews)
+            </dt>
+            @foreach (var review in Model.Apartment.ApartmentReviews)
+            {
+                <dd>
+                    <span>
+                        @review.CreatedAt ,  @review.Username , @review.Stars
+                    </span>
+                    <p>@review.Details</p>
+                </dd>
+            }
+
+
+            @if (!String.IsNullOrWhiteSpace(User.Identity.Name))
+            {
+
+                <dd>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Rating</label>
+                        <select class="form-control" id="RatingSelect">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Details:</label>
+                        <textarea class="form-control" id="reviewDetails" rows="3"></textarea>
+                    </div>
+                    <div class="g-recaptcha"
+                         data-sitekey="6LfI9XYhAAAAAN_XhWtifbM4a0e_kYxVTpAToSQu"></div>
+                    <button type="submit" data-id="@Model.Apartment.Id" id="btnSubmitReview" class="btn btn-primary" onclick="submitReview()">Submit</button>
+
+                </dd>
+            }
+        <dd>
+
+            <form>
+
+                <div class="form-group">
+                    <label for="nameInput">Name</label>
+                    <input type="text" class="form-control" id="nameInput" value=@Model.User.UserName required>
+                </div>
+                <div class="form-group">
+                    <label for="emailInput">Email address</label>
+                    <input type="email" class="form-control" id="emailInput" value=@Model.User.Email required>
+                </div>
+                <div class="form-group">
+                    <label for="phoneInput">Phone</label>
+                    <input type="text" class="form-control" id="phoneInput" required value=@Model.User.PhoneNumber>
+                </div>
+                <div class="form-group">
+                    <label for="addressInput">Address</label>
+                    <input type="text" class="form-control" id="addressInput" value=@Model.User.Address>
+                </div>
+                <div class="form-group">
+                    <label for="detailsInput">Details:</label>
+                    <textarea class="form-control" id="detailsInput" rows="3" placeholder="" required></textarea>
+                    <small id="emailHelp" class="form-text text-muted"> Molim vas navedite:broj ljudi,datume dolaska i datume odlaska za rezervaciju</small>
+
+                </div>
+                <div id="dvCaptcha">
+                </div>
+                <input type="hidden" id="hfCaptcha" />
+                <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
+                <button type="submit" data-id="@Model.Apartment.Id" id="reservationSubmit" onclick="submitReservation()">Submit</button>
+            </form>
+            <div class="alert alert-danger" role="alert" style="display:none" >
+                This is a danger alert—check it out!
+            </div>
+        </dd>
+
+            @section Scripts
+{
+
+                <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+                        async defer></script>
+
+                <script type="text/javascript">
+                     function onloadCallback() {
+            grecaptcha.render('dvCaptcha', {
+                'sitekey': '6LfI9XYhAAAAAN_XhWtifbM4a0e_kYxVTpAToSQu',
+                'callback': function (response) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Apartments/AjaxMethod",
+                        data: "{response: '" + response + "'}",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {
+                            console.log(r);
+                            var captchaResponse = jQuery.parseJSON(r);
+                            if (captchaResponse.success) {
+                                $("#hfCaptcha").val(captchaResponse.success);
+                                $("#rfvCaptcha").hide();
+                            } else {
+                                alert("fail");
+                                $("#hfCaptcha").val("");
+                                $("#rfvCaptcha").show();
+                                var error = captchaResponse["error-codes"][0];
+                                $("#rfvCaptcha").html("RECaptcha error. " + error);
+                            }
+                        }
+                    });
+                }
+            });
+        };
+
+
+    $(function () {
+       //starclick autofill
+       //$("#my_id .my_class")
+
+        $("#btnSave").click(function () {
+            //alert("");
+            //hidenfield value=star
+        });
+    });
+                    function submitReservation() {
+                        var nameVal = $('#nameInput').val();
+                        var emailVal = $('#emailInput').val();
+                        var phoneVal = $('#phoneInput').val();
+                        var detailsVal = $('#detailsInput').val();
+                        var addressVal = $('#addressInput').val();
+                        var apartmentIdVal = $('#reservationSubmit').data("id");
+                        if (grecaptcha.getResponse() == "") {
+                            //throw error to fill in captcha
+                            $("#rfvCaptcha").val("RECaptcha error. ");
+                            alert("do this");
+                            return;
+                        } else {
+                             $.ajax({
+            type: 'POST',
+            url: '@Url.Action("createApartmentReservation")',
+                             dataType: 'json',
+                                 data: { name: nameVal, email: emailVal, phone: phoneVal, details: detailsVal, apartmentId: apartmentIdVal, address: addressVal },
+                                 success: function () {
+                                     console.log("success");
+            },
+            error: function (ex) {
+                var r = jQuery.parseJSON(response.responseText);
+                console.log("failed");
+                alert("do this2");
+
+
+                alert("Message: " + r.Message);
+                alert("StackTrace: " + r.StackTrace);
+                alert("ExceptionType: " + r.ExceptionType);
+            }
+        });
+                        }
+
+
+        return false;
+
+                    }
+                    //origigi Submit
+                    function submitReview() {
+                        var ratingVal = $('#RatingSelect').find(":selected").text();
+                        var details = $('#reviewDetails').val();
+                        var apID = $('#btnSubmitReview').data("id");
+                //empty input values at end
+               // var ratingVal=
+       // $("#tblStudent tbody tr").remove();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("createApartmentReview")',
+            dataType: 'json',
+            data: { rating: ratingVal, reviewDetails: details, apartmentId: apID },
+            success: function () {
+
+            },
+            error: function (ex) {
+                var r = jQuery.parseJSON(response.responseText);
+                alert("Message: " + r.Message);
+                alert("StackTrace: " + r.StackTrace);
+                alert("ExceptionType: " + r.ExceptionType);
+            }
+        });
+        return false;
+    }
+                </script>
+            }
+
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
         @Html.ActionLink("Back to List", "Index")
     </p>
 </body>
