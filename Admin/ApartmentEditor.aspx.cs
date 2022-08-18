@@ -210,7 +210,9 @@ namespace Admin
             else
             {
                 apartment.Id = int.Parse(Request.QueryString["id"]);
+                apartment.ApartmentPictures = _apartmentRepository.GetApartmentPictures(apartment.Id);
                 apartment.ApartmentPictures.AddRange(apartmentPictures);
+
 
                 _apartmentRepository.UpdateApartment(apartment);
                 Response.Redirect($"ApartmentEditor.aspx?{Request.QueryString}");

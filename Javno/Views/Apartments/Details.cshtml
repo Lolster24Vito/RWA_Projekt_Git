@@ -12,15 +12,14 @@
     <title>Details</title>
 </head>
 <body>
-
     <!-- Load images here -->
 
+    <p>
+        <a id="test" class="btn btn-primary">Click me</a>
+    </p>
+
     <div id="RepresentativeImage">
-        <a class="fancy-photo"
-           rel="group"
-           href="">
-            <img src="" />
-        </a>
+
     </div>
     <br /><br />
 
@@ -283,7 +282,8 @@
                 <script type="text/javascript" src="/scripts/jquery.fancybox.pack.js"></script>
 
                 <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-                        async defer></script>
+                        async defer>
+                </script>
 
                 <script type="text/javascript">
                      function onloadCallback() {
@@ -319,11 +319,38 @@
                     $(document).ready(function () {
                         //todo this doesnt work
                         loadImages();
-                       // addFancyBox();
+                      //  addFancyBox();
                     });
 
+                    $("#test").on('click', function () {
+                        alert("clik");
+                        $.fancybox.open([
+                            {
+                                src: 'https://source.unsplash.com/IvfoDk30JnI/1500x1000',
+                                opts: {
+                                    caption: 'First caption',
+                                    thumb: 'https://source.unsplash.com/IvfoDk30JnI/240x160'
+                                }
+                            },
+                            {
+                                src: 'https://source.unsplash.com/0JYgd2QuMfw/1500x1000',
+                                opts: {
+                                    caption: 'Second caption',
+                                    thumb: 'https://source.unsplash.com/0JYgd2QuMfw/240x160'
+                                }
+                            }
+                        ], {
+                            loop: true,
+                            thumbs: {
+                                autoStart: true
+                            }
+                        });
+
+                    });
+                   
 
                     function loadImages() {
+                        alert("Called");
                         $.ajax({
                 type: 'POST',
                 url: '@Url.Action("loadApartmentImages")',
@@ -333,20 +360,24 @@
                     $('#RestOfImages').empty();
 
                     var items = '';
-                                $.each(data, function (i, item) {
-                                    var ap = "<a data-fancybox='gallery'  data-src='" + item.Base64Content + "'   data-caption='" + item.Name + "'>";
-                                    ap += "<img src='" + item.Base64Content + "' /> </a> ";
+                    $.each(data, function (i, item) {
+                        //ap += "href='/apartments/Picture?path=" + item.Path + "'>";
+                        var ap = "<a  data-fancybox='gallery'  data-src='/apartments/Picture?path=" + item.Path + "' data-caption='Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code'>";
+                        ap += "<img src ='/apartments/Picture?path=" + item.Path+"'/></a> "
 
-                        /*var ap = " <a class='fancy-photo' rel='group' ";
-                        ap += "href='" + item.Base64Content + "'>";
-                        ap += "<img src='" + item.Base64Content + "' /> </a>";*/
+
+                       // var ap = " <a class='fancy-photo' rel='group' ";
+                        //ap += "href='/apartments/Picture?path=" + item.Path + "'>";
+                        //ap += "<img src='/apartments/Picture?path=" + item.Path + "' /> </a>";
+
+
                         /*  <a class="fancy-photo"
                             rel="group"
                             href="data:image/png;base64,/Z">
                             <img src="data:image/png;base64,/9j/4A" />
                         </a>*/
                         /*
-  <a
+                         <a
   data-fancybox="gallery"
   data-src="https://lipsum.app/id/2/1024x768"
   data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code"
@@ -369,14 +400,13 @@
                 }
                         });
                         //fancybox
-                        addFancyBox2();
+                        addFancyBox();
 
                     }
                     function addFancyBox() {
                         $(".fancy-text").fancybox();
                         $(".fancy-photo").fancybox({
                             cyclic: true,
-                            type: 'image',
                             onUpdate: function () {
                                 $(".fancybox-nav span").css({
                                     visibility: "visible"
@@ -390,11 +420,6 @@
                                 return;
                             }
                         });
-                    }
-                    function addFancyBox2() {
-                        alert("test?");
-                        $(".fancy-photo").fancybox({ type: 'image', selector: '.should-popout',type:'image'});
-
                     }
 
                     function submitReservation() {
@@ -420,7 +445,6 @@
             error: function (ex) {
                 var r = jQuery.parseJSON(response.responseText);
                 console.log("failed");
-                alert("do this2");
 
 
                 alert("Message: " + r.Message);

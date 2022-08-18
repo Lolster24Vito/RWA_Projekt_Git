@@ -462,6 +462,10 @@ namespace RWADatabaseLibrary.Repository
 
 
             var pics = new List<ApartmentPicture>();
+
+            string basedir = AppDomain.CurrentDomain.BaseDirectory;
+            string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(basedir)) + "\\Admin\\Content\\Pictures\\";
+
             foreach (DataRow row in ds.Tables[0].Rows)
             {
                 ApartmentPicture picture = new Models.ApartmentPicture
@@ -472,7 +476,11 @@ namespace RWADatabaseLibrary.Repository
                     IsRepresentative = bool.Parse(row["IsRepresentative"].ToString()),
 
                 };
-                if (String.IsNullOrWhiteSpace(row["Base64Content"].ToString()))
+                string fullPath = uplImagesRoot + picture.Path;
+
+                if (File.Exists(fullPath))
+                pics.Add(picture);
+                /*if (String.IsNullOrWhiteSpace(row["Base64Content"].ToString()))
                 {
                     string basedir = AppDomain.CurrentDomain.BaseDirectory;
                     string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(basedir)) + "\\Admin\\";
@@ -491,7 +499,7 @@ namespace RWADatabaseLibrary.Repository
                 {
                   picture.Base64Content = string.Format("data:image/png;base64,{0}", row["Base64Content"].ToString());
                   pics.Add(picture);
-                }
+                }*/
               /*  if (String.IsNullOrEmpty(picture.Base64Content))
                 {
                     picture.Base64Content = "\'\'";
@@ -502,8 +510,6 @@ namespace RWADatabaseLibrary.Repository
 
             return pics;
         }
-
-
         public void DeleteApartment(int id)
         {
             var commandParameters = new List<SqlParameter>();

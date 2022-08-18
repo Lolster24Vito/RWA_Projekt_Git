@@ -13,6 +13,7 @@ using RWADatabaseLibrary.Models.ViewModels;
 using RWADatabaseLibrary.Repository;
 using Microsoft.AspNet.Identity;
 using System.Web.Security;
+using System.IO;
 
 namespace Javno.Controllers
 {
@@ -160,6 +161,23 @@ namespace Javno.Controllers
         // GET: Apartments/Details/5
         public ActionResult Details(int? id)
         {
+
+            var path = "preuzmi (10).jpg";
+            // Popravi putanju do slike, u bazi nije cijela putanja!
+            var javnoRoot = Server.MapPath("~");
+            var adminRoot = Path.Combine(javnoRoot, "../Admin/Content/Pictures");
+            var picturePathFake = Path.Combine(adminRoot, path);
+
+            string basedir = AppDomain.CurrentDomain.BaseDirectory;
+            string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(basedir)) + "\\Admin\\Content\\Pictures\\";
+            string picturePath = uplImagesRoot + "preuzmi (10).jpg";
+
+            string mimeType = MimeMapping.GetMimeMapping(picturePath);
+
+            var filesomething= new FilePathResult(picturePath, mimeType);
+
+
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -207,6 +225,21 @@ namespace Javno.Controllers
             string url = "https://www.google.com/recaptcha/api/siteverify?secret=" + "6LfI9XYhAAAAAAU7-ys6LzivfAEiWae_ojzthjtT" + "&response=" + response;
             string responseStr = (new WebClient()).DownloadString(url);
             return Json(responseStr);
+        }
+
+        public ActionResult Picture(string path)
+        {
+            if (path == null || string.IsNullOrEmpty(path))
+                return Content(content: "File missing"); // Rješenje "nabrzaka", nije najbolje
+
+            // Popravi putanju do slike, u bazi nije cijela putanja!
+
+            string basedir = AppDomain.CurrentDomain.BaseDirectory;
+            string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(basedir)) + "\\Admin\\Content\\Pictures\\";
+            var picturePath=Path.Combine(uplImagesRoot, path);
+            string mimeType = MimeMapping.GetMimeMapping(picturePath);
+            FilePathResult test = new FilePathResult(picturePath, mimeType);
+            return new FilePathResult(picturePath, mimeType);
         }
 
 
