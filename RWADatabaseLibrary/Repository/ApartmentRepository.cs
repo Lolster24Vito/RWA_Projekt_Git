@@ -17,11 +17,11 @@ namespace RWADatabaseLibrary.Repository
     {
         private static string _connectionString = ConfigurationManager.ConnectionStrings["apartments"].ConnectionString;
 
-        public List<ApartmentSearchViewModel> SearchApartments(int? rooms,int? adults,int? children, int? destination,int? order)
+        public List<ApartmentSearchViewModel> SearchApartments(int? rooms, int? adults, int? children, int? destination, int? order)
         {
-            string basedir= AppDomain.CurrentDomain.BaseDirectory;
-            string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(basedir))+"\\Admin\\";
-           // uplImagesFolder = Path.GetFullPath(uplImagesRoot + PICPATH);
+            string basedir = AppDomain.CurrentDomain.BaseDirectory;
+            string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(basedir)) + "\\Admin\\";
+            // uplImagesFolder = Path.GetFullPath(uplImagesRoot + PICPATH);
             var commandParameters = new List<SqlParameter>();
             if (rooms.HasValue)
             {
@@ -54,11 +54,11 @@ namespace RWADatabaseLibrary.Repository
             {
                 var ap = new ApartmentSearchViewModel();
                 ap.Id = Convert.ToInt32(row["ID"]);
-                
+
                 ap.Name = row["Name"].ToString();
-               
+
                 ap.CityName = row["CityName"]?.ToString();
-               
+
                 ap.Price = Convert.ToDecimal(row["Price"]);
                 ap.MaxAdults =
                 row["MaxAdults"] != DBNull.Value ?
@@ -76,7 +76,7 @@ namespace RWADatabaseLibrary.Repository
                 row["BeachDistance"] != DBNull.Value ?
                 (int?)Convert.ToInt32(row["BeachDistance"]) :
                 null;
-                ap.RepresentativePicturePath= row["RepresentativePicturePath"].ToString();
+                ap.RepresentativePicturePath = row["RepresentativePicturePath"].ToString();
                 ap.StarRating = row["StarRating"] != DBNull.Value ?
                 (int)Convert.ToInt32(row["StarRating"]) :
                 0;
@@ -84,25 +84,25 @@ namespace RWADatabaseLibrary.Repository
                 string fullPath = uplImagesRoot + ap.RepresentativePicturePath;
                 //TODO CHECK IF FILE EXISTS
 
-               
-                    if (String.IsNullOrWhiteSpace(row["RepresentativePictureBytes"].ToString()))
-                    {
+
+                if (String.IsNullOrWhiteSpace(row["RepresentativePictureBytes"].ToString()))
+                {
                     if (File.Exists(fullPath))
                     {
 
                         byte[] byteData = System.IO.File.ReadAllBytes(fullPath);
                         string imreBase64Data = Convert.ToBase64String(byteData);
                         string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
-                        SetApartmentPictureBase64(ap.RepresentativePicturePath,imreBase64Data);
+                        SetApartmentPictureBase64(ap.RepresentativePicturePath, imreBase64Data);
                         ap.RepresentativePictureBytes = imgDataURL;
                     }
-                    }
-                    else
-                    {
-                        ap.RepresentativePictureBytes =string.Format("data:image/png;base64,{0}", row["RepresentativePictureBytes"].ToString());
-                    }
-                   
-                if(String.IsNullOrEmpty(ap.RepresentativePictureBytes))
+                }
+                else
+                {
+                    ap.RepresentativePictureBytes = string.Format("data:image/png;base64,{0}", row["RepresentativePictureBytes"].ToString());
+                }
+
+                if (String.IsNullOrEmpty(ap.RepresentativePictureBytes))
                 {
                     ap.RepresentativePictureBytes = "\'\'";
                 }
@@ -130,12 +130,12 @@ namespace RWADatabaseLibrary.Repository
                 ap.Id = Convert.ToInt32(row["ID"]);
                 ap.Guid = Guid.Parse(row["Guid"].ToString());
                 ap.CreatedAt = Convert.ToDateTime(row["CreatedAt"]);
-                
+
                 ap.ApartmentId = Convert.ToInt32(row["ApartmentId"]);
                 ap.UserId = Convert.ToInt32(row["UserId"]);
-                ap.Details=row["Details"]?.ToString();
-                ap.Stars= Convert.ToInt32(row["Stars"]);
-                ap.Username= row["UserName"].ToString();
+                ap.Details = row["Details"]?.ToString();
+                ap.Stars = Convert.ToInt32(row["Stars"]);
+                ap.Username = row["UserName"].ToString();
 
                 reviewList.Add(ap);
             }
@@ -218,7 +218,7 @@ namespace RWADatabaseLibrary.Repository
             }
             return apList;
         }
-        public void SetApartmentPictureBase64(string path,string base64)
+        public void SetApartmentPictureBase64(string path, string base64)
         {
             var commandParameters = new List<SqlParameter>();
             commandParameters.Add(new SqlParameter("@path", path));
@@ -449,6 +449,61 @@ namespace RWADatabaseLibrary.Repository
 
             return pics;
         }
+        public List<ApartmentPicture> GetApartmentPicturesPublic(int apartmentId)
+        {
+            var commandParameters = new List<SqlParameter>();
+            commandParameters.Add(new SqlParameter("@apartmentId", apartmentId));
+
+            var ds = SqlHelper.ExecuteDataset(
+                _connectionString,
+                CommandType.StoredProcedure,
+                "dbo.GetApartmentPicturesPublic",
+                commandParameters.ToArray());
+
+
+            var pics = new List<ApartmentPicture>();
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+                ApartmentPicture picture = new Models.ApartmentPicture
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Path = row["Path"].ToString(),
+                    Name = row["Name"].ToString(),
+                    IsRepresentative = bool.Parse(row["IsRepresentative"].ToString()),
+
+                };
+                if (String.IsNullOrWhiteSpace(row["Base64Content"].ToString()))
+                {
+                    string basedir = AppDomain.CurrentDomain.BaseDirectory;
+                    string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(basedir)) + "\\Admin\\";
+                    string fullPath = uplImagesRoot + picture.Path;
+                    if (File.Exists(fullPath))
+                    {
+                        byte[] byteData = System.IO.File.ReadAllBytes(fullPath);
+                        string imreBase64Data = Convert.ToBase64String(byteData);
+                        string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+                        SetApartmentPictureBase64(picture.Path, imreBase64Data);
+                        picture.Base64Content = imgDataURL;
+                        pics.Add(picture);
+                    }
+                }
+                else
+                {
+                  picture.Base64Content = string.Format("data:image/png;base64,{0}", row["Base64Content"].ToString());
+                  pics.Add(picture);
+                }
+              /*  if (String.IsNullOrEmpty(picture.Base64Content))
+                {
+                    picture.Base64Content = "\'\'";
+                }
+                pics.Add(picture);*/
+            }
+
+
+            return pics;
+        }
+
+
         public void DeleteApartment(int id)
         {
             var commandParameters = new List<SqlParameter>();

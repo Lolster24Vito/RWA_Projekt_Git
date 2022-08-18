@@ -14,6 +14,8 @@ namespace RWADatabaseLibrary.Models
         public string Name { get; set; }
         public bool IsRepresentative { get; set; }
         public bool DoDelete { get; set; }
+        public string Base64Content { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
         public static ApartmentPicture CreateApartmentFromPath(string path)
         {
@@ -25,7 +27,19 @@ namespace RWADatabaseLibrary.Models
                 IsRepresentative = false,
             };
         }
-       
+        public static ApartmentPicture CreateApartmentFromPath(string path,string base64)
+        {
+
+            return new ApartmentPicture
+            {
+                Path = path,
+                Name = System.IO.Path.GetFileNameWithoutExtension(path),
+                IsRepresentative = false,
+                Base64Content = base64
+            };
+        }
+
+
     }
 
 }

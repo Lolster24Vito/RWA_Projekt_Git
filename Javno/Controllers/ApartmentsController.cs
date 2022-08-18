@@ -130,6 +130,14 @@ namespace Javno.Controllers
             }
             return Json(apartments);
         }
+        public JsonResult loadApartmentImages(int apartmentId)
+        {
+            //todo fix this
+            List<ApartmentPicture> images = _apartmentRepository.GetApartmentPicturesPublic(apartmentId);
+            var jsonResult = Json(images);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
         private void FormToCookie(int? rooms, int? adults, int? children, int? destination, int? order)
         {
             HttpCookie cookie = Request.Cookies["SearchParam"];
@@ -161,10 +169,17 @@ namespace Javno.Controllers
             if (captchaResponse != null && string.IsNullOrWhiteSpace(captchaResponse))
             {
                 //Captha not checked show error in server
+                ViewBag.CapthaShowError = "block";
             }
-            
+            else
+            {
+                ViewBag.CapthaShowError = "none";
+
+            }
+
             ApartmentDetailsViewModel viewModel = new ApartmentDetailsViewModel();
             AspNetUser currentUser;
+           // List<ApartmentPicture> apartmentPictures = _apartmentRepository.GetApartmentPicturesPublic(id.Value);
             if (User.Identity.IsAuthenticated)
             {
                 currentUser = _userRepository.GetUser(int.Parse(User.Identity.GetUserId()));
@@ -184,6 +199,7 @@ namespace Javno.Controllers
             }
             return View(viewModel);
         }
+
 
         [HttpPost]
         public JsonResult AjaxMethod(string response)

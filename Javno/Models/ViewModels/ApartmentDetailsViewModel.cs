@@ -10,5 +10,6 @@ namespace Javno.Models.ViewModels
     {
         public Apartment Apartment { get; set; }
         public AspNetUser User { get; set; }
+
     }
 }

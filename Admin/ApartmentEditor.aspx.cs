@@ -177,7 +177,7 @@ namespace Admin
         protected void lblSave_Click(object sender, EventArgs e)
         {
             var files = SaveUploadedImagesToDisk();
-            var apartmentPictures=files.Select(x=>ApartmentPicture.CreateApartmentFromPath(x)).ToList();
+            var apartmentPictures=files.Select(x=>ApartmentPicture.CreateApartmentFromPath(x.Path,x.Base64)).ToList();
             bool isNewApartment = (Request.QueryString["id"] == null);
 
             Apartment apartment = new Apartment() ;
@@ -201,6 +201,10 @@ namespace Admin
             {
                 apartment.ApartmentPictures = apartmentPictures;
                 _apartmentRepository.CreateApartment(apartment);
+                foreach (var item in files)
+                {
+                    _apartmentRepository.SetApartmentPictureBase64(item.Path, item.Base64);
+                }
                 Response.Redirect($"ApartmentList.aspx");
             }
             else
@@ -271,12 +275,12 @@ namespace Admin
 
         }
 
-        private List<string> SaveUploadedImagesToDisk()
+        private List<PicData> SaveUploadedImagesToDisk()
         {
 
 
 
-            var files = new List<string>();
+            var files = new List<PicData>();
 
             if (uplImages.HasFiles)
             {
@@ -291,12 +295,16 @@ namespace Admin
                     string uplImagePath = Path.Combine(uplImagesRoot, uploadedFile.FileName);
                     uploadedFile.SaveAs(uplImagePath);
                     //byte[] byteData = System.IO.File.ReadAllBytes(uplImagePath);
-                   // string imreBase64Data = Convert.ToBase64String(byteData);
-                    files.Add(uploadedFile.FileName);
+                    // string imreBase64Data = Convert.ToBase64String(byteData);
+                    byte[] byteData = System.IO.File.ReadAllBytes(uplImagePath);
+                    string imreBase64Data = Convert.ToBase64String(byteData);
+
+                    files.Add(new PicData { Path = uploadedFile.FileName, Base64 = imreBase64Data });
                 }
             }
             return files;
         }
+        
 
         protected void repApartmentPictures_DataBinding(object sender, EventArgs e)
         {
