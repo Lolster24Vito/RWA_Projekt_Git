@@ -161,7 +161,7 @@ namespace Javno.Controllers
         // GET: Apartments/Details/5
         public ActionResult Details(int? id)
         {
-
+            /*
             var path = "preuzmi (10).jpg";
             // Popravi putanju do slike, u bazi nije cijela putanja!
             var javnoRoot = Server.MapPath("~");
@@ -176,7 +176,7 @@ namespace Javno.Controllers
 
             var filesomething= new FilePathResult(picturePath, mimeType);
 
-
+            */
 
             if (id == null)
             {
@@ -207,6 +207,7 @@ namespace Javno.Controllers
             Apartment apartment = _apartmentRepository.GetApartment(id.Value);
             apartment.Tags = _apartmentRepository.GetApartmentTags(id.Value);
             apartment.ApartmentReviews = _apartmentRepository.GetApartmentReviews(id.Value);
+            apartment.ApartmentPictures=_apartmentRepository.GetApartmentPicturesPublic(id.Value);
 
             viewModel.Apartment = apartment;
            
