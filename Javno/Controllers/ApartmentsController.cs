@@ -64,7 +64,8 @@ namespace Javno.Controllers
 
             return View(searchFiltersViewModel);
         }
-        public void createApartmentReview(int rating, string reviewDetails,int apartmentId)
+
+        public ActionResult createApartmentReview(int rating, string reviewDetails,int apartmentId)
         {
             //apartment repo
             string currentUserID=User.Identity.GetUserId();
@@ -86,6 +87,7 @@ namespace Javno.Controllers
                 //Throw error
 
             }
+            return View();
         }
         public void createApartmentReservation(string name, string email, string phone,string details,string address, int apartmentId)
         {
@@ -133,7 +135,6 @@ namespace Javno.Controllers
         }
         public JsonResult loadApartmentImages(int apartmentId)
         {
-            //todo fix this
             List<ApartmentPicture> images = _apartmentRepository.GetApartmentPicturesPublic(apartmentId);
             var jsonResult = Json(images);
             jsonResult.MaxJsonLength = int.MaxValue;
@@ -161,22 +162,7 @@ namespace Javno.Controllers
         // GET: Apartments/Details/5
         public ActionResult Details(int? id)
         {
-            /*
-            var path = "preuzmi (10).jpg";
-            // Popravi putanju do slike, u bazi nije cijela putanja!
-            var javnoRoot = Server.MapPath("~");
-            var adminRoot = Path.Combine(javnoRoot, "../Admin/Content/Pictures");
-            var picturePathFake = Path.Combine(adminRoot, path);
-
-            string basedir = AppDomain.CurrentDomain.BaseDirectory;
-            string uplImagesRoot = Path.GetDirectoryName(Path.GetDirectoryName(basedir)) + "\\Admin\\Content\\Pictures\\";
-            string picturePath = uplImagesRoot + "preuzmi (10).jpg";
-
-            string mimeType = MimeMapping.GetMimeMapping(picturePath);
-
-            var filesomething= new FilePathResult(picturePath, mimeType);
-
-            */
+            
 
             if (id == null)
             {

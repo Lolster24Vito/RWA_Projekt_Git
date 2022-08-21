@@ -183,15 +183,21 @@ namespace Admin
             Apartment apartment = new Apartment() ;
             try
             {
-                apartment = GetFormApartment();
-               // if(apartment.this and that isnt in throw error) TODO  VITO
-
                 ErrorMessage.Visible=false;
+                apartment = GetFormApartment();
+
+                if (apartment == null)
+                {
+                    return;
+                }
+
+
+
 
             }
             catch (Exception)
             {
-                ErrorMessage.InnerText = "Molim vas popunite sve vrijednosti";
+                ErrorMessage.InnerText = "Dogodila se greska, molim vas popunite sve vrijednosti za svaki slučaj";
                 ErrorMessage.Visible=true;
                 return;
 
@@ -215,20 +221,53 @@ namespace Admin
 
 
                 _apartmentRepository.UpdateApartment(apartment);
+                foreach (var pic in apartmentPictures)
+                {
+                    _apartmentRepository.SetApartmentPictureBase64(pic.Path, pic.Base64Content);
+                }
                 Response.Redirect($"ApartmentEditor.aspx?{Request.QueryString}");
 
             }
             Response.Redirect("ApartmentList.aspx");
         }
+
+       
+
         private Apartment GetFormApartment()
         {
-            int statusId = int.Parse(ddlStatus.SelectedValue);
+            string errorMissingValues = "";
+            bool isValid = true;
+
+            int? statusId = int.Parse(ddlStatus.SelectedValue);
+            if (statusId == 0)
+            {
+                statusId = null;
+                errorMissingValues += "Status,";
+                isValid = false;
+            }
 
             int? cityId = int.Parse(ddlCity.SelectedValue);
             if (cityId == 0)
+            {
                 cityId = null;
+                errorMissingValues += "Grad,";
+                isValid = false;
+            }
 
-            int ownerId = int.Parse(ddlApartmentOwner.SelectedValue);
+            int? ownerId = int.Parse(ddlApartmentOwner.SelectedValue);
+            if(ownerId == 0)
+            {
+                ownerId = null;
+                errorMissingValues += "Vlasnik,";
+                isValid = false;
+
+            }
+            if (!isValid)
+            {
+                ErrorMessage.InnerText = "Molim vas popunite vrijednosti:"+errorMissingValues;
+                ErrorMessage.Visible = true;
+                return null;
+            }
 
             decimal price = decimal.Parse(tbPrice.Text);
 
@@ -254,9 +293,9 @@ namespace Admin
           {
               Guid = Guid.NewGuid(),
 
-              OwnerId = ownerId,
+              OwnerId = ownerId.Value,
               TypeId = 999, // hardkodirano
-              StatusId = statusId,
+              StatusId = statusId.Value,
               CityId = cityId,
               Address = tbAddress.Text,
               Name = tbName.Text,
@@ -286,9 +325,7 @@ namespace Admin
 
             if (uplImages.HasFiles)
             {
-                //NEW TODO
-                /*string uplImagesRootParent = Path.GetDirectoryName(Path.GetDirectoryName(Server.MapPath("~")));
-                string uplImagesRoot = Path.GetFullPath(uplImagesRootParent + PICPATH);*/
+
                  var uplImagesRoot = Server.MapPath(PICPATH); //original
                 if (!Directory.Exists(uplImagesRoot))
                     Directory.CreateDirectory(uplImagesRoot);

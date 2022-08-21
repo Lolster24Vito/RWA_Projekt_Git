@@ -30,7 +30,6 @@ namespace Admin
                     apartment = _apartmentRepository.GetApartment(id.Value);
                     if (apartment == null)
                     {
-                        //show error TODO
                         id = null;
                     Response.Redirect("ApartmentList.aspx");
                     }
@@ -71,6 +70,19 @@ namespace Admin
         protected void lblSave_Click(object sender, EventArgs e)
         {
             //http://localhost:60815/ApartmentReservationAdd.aspx?Id=2
+
+            if (checkBoxUseRegistered.Checked&& String.IsNullOrWhiteSpace(lbUsers.SelectedValue)){
+                ErrorMessage.InnerText = "Molim vas odaberite korisnika za za rezervaciju";
+                ErrorMessage.Visible = true;
+                return;
+            }
+            if(checkBoxUseRegistered.Checked && string.IsNullOrWhiteSpace(tbDetailsRegisteredUser.Text))
+                {
+                    ErrorMessage.InnerText = "Navedite detalje rezervacije";
+                ErrorMessage.Visible = true;
+
+                return;
+                }
             ApartmentReservation apartmentReservation = GetReservationForm() ;
             if (!apartmentReservation.UserId.HasValue&&
                (String.IsNullOrWhiteSpace(apartmentReservation.Details)||
@@ -90,7 +102,7 @@ namespace Admin
                 ErrorMessage.Visible = false;
 
             }
-            //test i zavrsit ovo funkciju TODO
+            
             _apartmentReservationRepository.CreateApartmentReservation(apartmentReservation);
             Response.Redirect("ApartmentList.aspx");
 

@@ -82,7 +82,6 @@ namespace RWADatabaseLibrary.Repository
                 0;
 
                 string fullPath = uplImagesRoot + ap.RepresentativePicturePath;
-                //TODO CHECK IF FILE EXISTS
 
 
                 if (String.IsNullOrWhiteSpace(row["RepresentativePictureBytes"].ToString()))

@@ -30,7 +30,7 @@ namespace Admin
                 apartment = _apartmentRepository.GetApartment(id);
                 if(apartment == null)
                 {
-                    //SHOW ERROR TODO
+                    throw new Exception("Error id does not exist");
                 }
                 lApartmentName.InnerText = apartment.Name;
 
@@ -58,8 +58,7 @@ namespace Admin
                     }
                     else
                     {
-                        //get info of user from user id
-                        //TODO
+
                         var aspNetUser=_userRepository.GetUser(reservation.UserId.Value);
                         arView.UserName=aspNetUser.UserName;
                         arView.UserEmail = aspNetUser.Email;

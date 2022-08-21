@@ -10,6 +10,19 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Details</title>
+    <style>
+        .fa-star {
+            color: rgba(112, 111, 111, 0.856);
+        }
+
+            .fa-star:hover {
+                color: #e2334c;
+            }
+
+            .fa-star.selected {
+                color: #001628;
+            }
+    </style>
 </head>
 <body>
   
@@ -227,13 +240,16 @@
 
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Rating</label>
-                        <select class="form-control" id="RatingSelect">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
+                        <input type="hidden" id="ratingHid" name="rating" value="-1">
+                        <div class="rating">
+                            <i class="ratings_stars fa fa-star" data-rating="1"></i>
+                            <i class="ratings_stars fa fa-star" data-rating="2"></i>
+                            <i class="ratings_stars fa fa-star" data-rating="3"></i>
+                            <i class="ratings_stars fa fa-star" data-rating="4"></i>
+                            <i class="ratings_stars fa fa-star" data-rating="5"></i>
+                        </div>
+
+
                     </div>
 
                     <div class="form-group">
@@ -325,35 +341,17 @@
 
 
                     $(document).ready(function () {
-                        //todo this doesnt work
+                        //todo remove unnedeed code
                        // loadImages();
                         addFancyBox();
                     });
 
-                    $("#test").on('click', function () {
-                        alert("clik");
-                        $.fancybox.open([
-                            {
-                                src: 'https://source.unsplash.com/IvfoDk30JnI/1500x1000',
-                                opts: {
-                                    caption: 'First caption',
-                                    thumb: 'https://source.unsplash.com/IvfoDk30JnI/240x160'
-                                }
-                            },
-                            {
-                                src: 'https://source.unsplash.com/0JYgd2QuMfw/1500x1000',
-                                opts: {
-                                    caption: 'Second caption',
-                                    thumb: 'https://source.unsplash.com/0JYgd2QuMfw/240x160'
-                                }
-                            }
-                        ], {
-                            loop: true,
-                            thumbs: {
-                                autoStart: true
-                            }
-                        });
-
+                    $('.rating').on('click', '.ratings_stars', function () {
+                        var star = $(this)
+                        star.addClass('selected')
+                        star.prevAll().addClass('selected')
+                        star.nextAll().removeClass('selected')
+                        $('#ratingHid').val(star.data('rating'))
                     });
                    
 
@@ -467,7 +465,7 @@
                     }
                     //origigi Submit
                     function submitReview() {
-                        var ratingVal = $('#RatingSelect').find(":selected").text();
+                        var ratingVal = $('#ratingHid').val();
                         var details = $('#reviewDetails').val();
                         var apID = $('#btnSubmitReview').data("id");
                 //empty input values at end
@@ -488,7 +486,7 @@
                 alert("ExceptionType: " + r.ExceptionType);
             }
         });
-        return false;
+                        location.reload(true);
     }
                 </script>
             }

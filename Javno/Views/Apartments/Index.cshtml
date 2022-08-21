@@ -10,10 +10,17 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <style>
+        .row.inline-block > * {
+            display: inline-block;
+            float: none;
+            vertical-align: top;
+        }
+
+    </style>
 </head>
 <body>
     <div id="SearchFilters">
-
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-default">Rooms</span>
@@ -92,14 +99,16 @@
                     $('#apartmentList').append("<div id='PicRow' class='row'> </div>");
 
 
-
+                    var j = 0;
                     var items = '';
                     $.each(data, function (i, item) {
-                        var ap = "<div class='col-md-4'>";
+                        var ap = "";
+                        if (j > 0 && j % 2 == 0) {
+                            ap += "<div class='w-100'></div>";
+                        }
+                        ap += "<div class='col-md-4'>";
                         //if (i == 0) ap += "<div class='row'>";
-                      //  if (i > 0 && i % 2 == 0) {
-                      //      ap += "</div><div class='row'>"
-                      //  }
+  
                         ap += "<div class='card thumbnail' style = 'max-width: 400px; ' ><div class='card-body'><div class='col-sm'> <div class='pull-right' style='padding:5px 30px'>";
                         for (let i = 0; i < item.StarRating; i++) {
                             ap += "<i class='fa fa-star '></i>"
@@ -121,7 +130,7 @@
                        // <a class='btn btn-primary stretched-link' href='/Apartments/Details/2'>Reserve</a>
                         ap += "<a href='/Apartments/Details/" + item.Id +"' class='btn btn-primary stretched-link' style='margin-left:30px;' >Reserve</a>"+"</div>";
                        
-                   
+                        j++;
                        
                         $('#PicRow').append(ap);
                     });
