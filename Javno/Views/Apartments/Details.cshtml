@@ -22,6 +22,10 @@
             .fa-star.selected {
                 color: #001628;
             }
+        #MainBody{
+            border:5px solid red;
+            width:100%;
+        }
     </style>
 </head>
 <body>
@@ -75,38 +79,7 @@
         <h4>Apartment</h4>
         <hr />
         <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Apartment.Guid)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Apartment.Guid)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Apartment.CreatedAt)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Apartment.CreatedAt)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Apartment.DeletedAt)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Apartment.DeletedAt)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Apartment.OwnerId)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Apartment.OwnerId)
-            </dd>
-
+            
             <dt>
                 @Html.DisplayNameFor(model => model.Apartment.OwnerName)
             </dt>
@@ -115,21 +88,6 @@
                 @Html.DisplayFor(model => model.Apartment.OwnerName)
             </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Apartment.TypeId)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Apartment.TypeId)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Apartment.StatusId)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Apartment.StatusId)
-            </dd>
 
             <dt>
                 @Html.DisplayNameFor(model => model.Apartment.StatusName)
@@ -139,13 +97,6 @@
                 @Html.DisplayFor(model => model.Apartment.StatusName)
             </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Apartment.CityId)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Apartment.CityId)
-            </dd>
 
             <dt>
                 @Html.DisplayNameFor(model => model.Apartment.CityName)

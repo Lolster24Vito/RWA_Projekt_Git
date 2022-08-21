@@ -11,56 +11,66 @@
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
     <style>
-        .row.inline-block > * {
-            display: inline-block;
-            float: none;
-            vertical-align: top;
-        }
-
+        
     </style>
 </head>
 <body>
-    <div id="SearchFilters">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default">Rooms</span>
-            </div>
-            <!--
+    
+       
+  
+
+        <div id="SearchFilters" class="panel panel-default">
+
+            <div class="panel-body" style="margin:10px">
+
+            <div class="input-group mb-3">
+                <div class="row">
+
+                    <div class="col-md-2 input-group-prepend ">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Rooms</span>
+                        @Html.EditorFor(model => model.Rooms, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "RoomsInput", @class = "form-control" } })
+                    </div>
+                    <!--
             <input type="number" id="RoomsInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
                 -->
-            <!--     -->
+                    <!--     -->
 
-            @Html.EditorFor(model => model.Rooms, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "RoomsInput", @class = "form-control" } })
 
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default">Adults</span>
-            </div>
-            <!--     <input type="number" id="AdultsInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    <div class="col-md-2 input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Adults</span>
+                    @Html.EditorFor(model => model.Adults, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "AdultsInput", @class = "form-control" } })
+                    </div>
+                    <!--     <input type="number" id="AdultsInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
             -->
-            @Html.EditorFor(model => model.Adults, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "AdultsInput", @class = "form-control" } })
 
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default">Children</span>
-            </div>
-            <!--
+                    <div class="col-md-2 input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Children</span>
+                    @Html.EditorFor(model => model.Children, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "ChildrenInput", @class = "form-control" } })
+                    </div>
+                    <!--
              <input type="number" id="ChildrenInput" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
                 -->
-            @Html.EditorFor(model => model.Children, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1", id = "ChildrenInput", @class = "form-control" } })
+                    <div class="pull-right">
 
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default">Destination</span>
-            </div>
-            @Html.DropDownListFor(m => m.Cities, new SelectList(Model.Cities, "Id", "Name"), new { @id = "DestinationValDropDown", @class = "form-control" })
+                    <div class=" input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Destination</span>
+                    </div>
+                    @Html.DropDownListFor(m => m.Cities, new SelectList(Model.Cities, "Id", "Name"), new { @id = "DestinationValDropDown", @class = "form-control" })
+                    
 
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default">Sort by</span>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Sort by</span>
+                    </div>
+                    @Html.DropDownListFor(m => m.OrderBy, new SelectList(Model.OrderBy, "Id", "Name"), new { @id = "OrderByDropDown", @class = "form-control" })
+                    </div>
+                </div>
             </div>
-            @Html.DropDownListFor(m => m.OrderBy, new SelectList(Model.OrderBy, "Id", "Name"), new { @id = "OrderByDropDown", @class = "form-control" })
+
+            <input type="button" value="Filter" class="btn btn-primary"  onclick="LoadData(true)">
+
+
+            </div>
         </div>
-        <input type="button" value="Search" onclick="LoadData(true)">
-
-
-    </div>
 
 
 
@@ -96,19 +106,20 @@
                 success: function (data) {
                     $('#apartmentList').empty();
 
-                    $('#apartmentList').append("<div id='PicRow' class='row'> </div>");
+                    //$('#apartmentList').append("<div id='PicRow' class='row'> </div>");
 
 
                     var j = 0;
                     var items = '';
+                    var ap = "";
                     $.each(data, function (i, item) {
-                        var ap = "";
-                        if (j > 0 && j % 2 == 0) {
-                            ap += "<div class='w-100'></div>";
+
+                        if ( j == 0) {
+                            ap += "<div id='PicRow' class='row'>";
                         }
                         ap += "<div class='col-md-4'>";
                         //if (i == 0) ap += "<div class='row'>";
-  
+
                         ap += "<div class='card thumbnail' style = 'max-width: 400px; ' ><div class='card-body'><div class='col-sm'> <div class='pull-right' style='padding:5px 30px'>";
                         for (let i = 0; i < item.StarRating; i++) {
                             ap += "<i class='fa fa-star '></i>"
@@ -128,12 +139,19 @@
                         ap += "</ul><h4 class='card-text' style='margin-left:30px;'>" + item.Price + "€ </h4>";
                         ///Apartments/Details/2001
                        // <a class='btn btn-primary stretched-link' href='/Apartments/Details/2'>Reserve</a>
-                        ap += "<a href='/Apartments/Details/" + item.Id +"' class='btn btn-primary stretched-link' style='margin-left:30px;' >Reserve</a>"+"</div>";
-                       
+                        ap += "<a href='/Apartments/Details/" + item.Id + "' class='btn btn-primary stretched-link' style='margin-left:30px;' >Reserve</a>" +"</div></div></div></div></div></div>";
+
+                        if (j!=0&&j % 2 == 0) {
+                            ap += "</div>";
+                            j = 0;
+                            return;
+                        }
                         j++;
-                       
-                        $('#PicRow').append(ap);
+
                     });
+                    ap += "</div>"
+                    console.log(ap);
+                        $('#apartmentList').append(ap);
                 },
                 error: function (ex) {
                     var r = jQuery.parseJSON(response.responseText);

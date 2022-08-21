@@ -272,9 +272,6 @@
     <Content Include="Views\Shared\_ApartmentCard.cshtml" />
     <Content Include="Views\Apartments\Details.cshtml" />
     <Content Include="Views\Apartments\Index.cshtml" />
-    <Content Include="Views\CapTest\Index.cshtml" />
-    <Content Include="Views\CapTest\Index2.cshtml" />
-    <Content Include="Views\CapTest\Index3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
