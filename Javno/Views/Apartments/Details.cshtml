@@ -11,22 +11,24 @@
     <meta name="viewport" content="width=device-width" />
     <title>Details</title>
     <style>
-        .fa-star {
+        .reviewSubmitStar.fa-star {
             color: rgba(112, 111, 111, 0.856);
         }
+        .fa-star {
+            color: #e2334c;
+        }
 
-            .fa-star:hover {
-                color: #e2334c;
-            }
+        .reviewSubmitStar.fa-star:hover {
+            color: #e2334c;
+        }
 
             .fa-star.selected {
-                color: #001628;
+                color: #e2334c;
             }
         #MainBody{
-            border:5px solid red;
             width:80%;
         }
-        .RepImg{
+        #RepImg{
             min-width:350px;
             max-width:450px;
             max-height:500px;
@@ -39,7 +41,7 @@
             flex-grow: 1;
         }
         #colDetails{
-           margin-top:50px;
+           margin-top:70px;
 
         }
         #apartmentDetailsList > li {
@@ -54,6 +56,14 @@
         span{
             margin:3px;
         }
+        .TitleStar {
+            font-size: 0.55em;
+            vertical-align: baseline;
+        }
+        #ApartmentRatingsStars {
+            margin-right: 50px;
+        }
+
     </style>
 </head>
 <body>
@@ -64,8 +74,20 @@
     </div>
     <div class="row">
         <div class="col-lg-4">
-            <h1>@Model.Apartment.Name</h1>
-
+            <h1>
+                @Model.Apartment.Name
+                        <div class="pull-right" id="ApartmentRatingsStars">
+                            @for (int i = 0; i < Model.Rating; i++)
+                            {
+                                <i class='fa fa-star TitleStar'></i>
+                            }
+                            @for (int i = Model.Rating; i < 5; i++)
+                            {
+                                <i class='fa fa-star-o TitleStar'></i>
+                            }
+                        </div>
+                    </h1>
+           
             <div id="RepresentativeImage">
                 @foreach (var picture in Model.Apartment.ApartmentPictures)
                 {
@@ -74,10 +96,11 @@
                         <a class="fancy-photo"
                            rel="group"
                            href="@picture.Base64Content">
-                            <img src="@picture.Base64Content" class="img-thumbnail" width="400px" id="RepImg" />
+                            <img src="@picture.Base64Content" class="img-thumbnail" width="500px" id="RepImg" />
                         </a>
                     }
                 }
+                <hr />
                 <div id="RestOfImages">
                     @foreach (var picture in Model.Apartment.ApartmentPictures)
                     {
@@ -127,19 +150,19 @@
 
                 <div class="form-group">
                     <label for="nameInput">Name</label>
-                    <input type="text" class="form-control" id="nameInput" value=@Model.User.UserName required>
+                    <input type="text" class="form-control" id="nameInput" value=@Model.UserName required>
                 </div>
                 <div class="form-group">
                     <label for="emailInput">Email address</label>
-                    <input type="email" class="form-control" id="emailInput" value=@Model.User.Email required>
+                    <input type="email" class="form-control" id="emailInput" value=@Model.UserEmail required>
                 </div>
                 <div class="form-group">
                     <label for="phoneInput">Phone</label>
-                    <input type="text" class="form-control" id="phoneInput" required value=@Model.User.PhoneNumber>
+                    <input type="text" class="form-control" id="phoneInput" required value=@Model.UserPhoneNumber>
                 </div>
                 <div class="form-group">
                     <label for="addressInput">Address</label>
-                    <input type="text" class="form-control" id="addressInput" value=@Model.User.Address>
+                    <input type="text" class="form-control" id="addressInput" value=@Model.UserAddress>
                 </div>
                 <div class="form-group">
                     <label for="detailsInput">Details:</label>
@@ -169,23 +192,24 @@
                     <div class="panel-body">
                         @if (!String.IsNullOrWhiteSpace(User.Identity.Name))
                         {
-                            <div>
-                                <div class="form-group">
-                                    <label for="exampleFormControlSelect1">Rating</label>
+                            <div id="ReviewForm">
+                                <div class="form-group" id="ratingValueDiv">
+                                    <label>Rating</label>
                                     <input type="hidden" id="ratingHid" name="rating" value="-1">
                                     <div class="rating">
-                                        <i class="ratings_stars fa fa-star" data-rating="1"></i>
-                                        <i class="ratings_stars fa fa-star" data-rating="2"></i>
-                                        <i class="ratings_stars fa fa-star" data-rating="3"></i>
-                                        <i class="ratings_stars fa fa-star" data-rating="4"></i>
-                                        <i class="ratings_stars fa fa-star" data-rating="5"></i>
+                                        <i class="ratings_stars fa fa-star reviewSubmitStar" data-rating="1"></i>
+                                        <i class="ratings_stars fa fa-star reviewSubmitStar" data-rating="2"></i>
+                                        <i class="ratings_stars fa fa-star reviewSubmitStar" data-rating="3"></i>
+                                        <i class="ratings_stars fa fa-star reviewSubmitStar" data-rating="4"></i>
+                                        <i class="ratings_stars fa fa-star reviewSubmitStar" data-rating="5"></i>
                                     </div>
+                                    <span class="help-block" id="reviewErrorMessage" style="display:none">Select a rating for your review</span>
 
 
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Details:</label>
+                                    <label for="exampleFormControlTextarea1">Details</label>
                                     <textarea class="form-control" id="reviewDetails" rows="3"></textarea>
                                 </div>
                                 <div class="g-recaptcha"
@@ -199,7 +223,7 @@
                                 @foreach (var review in Model.Apartment.ApartmentReviews)
                                 {
                                 <li class="media">
-                                    <a href="#" class="pull-left">
+                                    <div  class="pull-left">
                                         @for (int i = 0; i < review.Stars; i++)
                                         {
                                             <i class='fa fa-star '></i>
@@ -208,7 +232,7 @@
                                         {
                                             <i class='fa fa-star-o '></i>
                                         }
-                                    </a>
+                                    </div>
                                     <div class="media-body">
                                         <span class="text-muted pull-right">
                                             <small class="text-muted">@review.CreatedAt</small>
@@ -231,208 +255,7 @@
 
 
 
-            <div id="RestOfImages">
-                @foreach (var picture in Model.Apartment.ApartmentPictures)
-                {
-                    if (!picture.IsRepresentative)
-                    {
-
-                        <a class="fancy-photo"
-                           rel="group"
-                           href="@picture.Base64Content">
-                            <img src="@picture.Base64Content" />
-                        </a>
-                    }
-                }
-
-
-            </div>
-
-
-            <div class="fancy-text" href="#moreInfo" onclick="void (0);">
-                Some info
-            </div>
-
-            <div id="moreInfo" style="display: none">
-                My awesome text
-            </div>
-
-            <div>
-                <h4>Apartment</h4>
-                <hr />
-                <dl class="dl-horizontal">
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.OwnerName)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Apartment.OwnerName)
-                    </dd>
-
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.StatusName)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Apartment.StatusName)
-                    </dd>
-
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.CityName)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Apartment.CityName)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.Address)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Apartment.Address)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.Name)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Apartment.Name)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.Price)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Apartment.Price)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.MaxAdults)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Apartment.MaxAdults)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.MaxChildren)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Apartment.MaxChildren)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.TotalRooms)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Apartment.TotalRooms)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.BeachDistance)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Apartment.BeachDistance)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.Tags)
-                    </dt>
-                    @foreach (var tag in Model.Apartment.Tags)
-                    {
-                        <dd>
-                            @tag.Name
-                        </dd>
-                    }
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Apartment.ApartmentReviews)
-                    </dt>
-                    @foreach (var review in Model.Apartment.ApartmentReviews)
-                    {
-                        <dd>
-                            <span>
-                                @review.CreatedAt ,  @review.Username , @review.Stars
-                            </span>
-                            <p>@review.Details</p>
-                        </dd>
-                    }
-
-
-                    @if (!String.IsNullOrWhiteSpace(User.Identity.Name))
-                    {
-
-                        <dd>
-
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Rating</label>
-                                <input type="hidden" id="ratingHid" name="rating" value="-1">
-                                <div class="rating">
-                                    <i class="ratings_stars fa fa-star" data-rating="1"></i>
-                                    <i class="ratings_stars fa fa-star" data-rating="2"></i>
-                                    <i class="ratings_stars fa fa-star" data-rating="3"></i>
-                                    <i class="ratings_stars fa fa-star" data-rating="4"></i>
-                                    <i class="ratings_stars fa fa-star" data-rating="5"></i>
-                                </div>
-
-
-                            </div>
-
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Details:</label>
-                                <textarea class="form-control" id="reviewDetails" rows="3"></textarea>
-                            </div>
-                            <div class="g-recaptcha"
-                                 data-sitekey="6LfI9XYhAAAAAN_XhWtifbM4a0e_kYxVTpAToSQu"></div>
-                            <button type="submit" data-id="@Model.Apartment.Id" id="btnSubmitReview" class="btn btn-primary" onclick="submitReview()">Submit</button>
-
-                        </dd>
-                    }
-                    <dd>
-
-                        <form>
-
-                            <div class="form-group">
-                                <label for="nameInput">Name</label>
-                                <input type="text" class="form-control" id="nameInput" value=@Model.User.UserName required>
-                            </div>
-                            <div class="form-group">
-                                <label for="emailInput">Email address</label>
-                                <input type="email" class="form-control" id="emailInput" value=@Model.User.Email required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phoneInput">Phone</label>
-                                <input type="text" class="form-control" id="phoneInput" required value=@Model.User.PhoneNumber>
-                            </div>
-                            <div class="form-group">
-                                <label for="addressInput">Address</label>
-                                <input type="text" class="form-control" id="addressInput" value=@Model.User.Address>
-                            </div>
-                            <div class="form-group">
-                                <label for="detailsInput">Details:</label>
-                                <textarea class="form-control" id="detailsInput" rows="3" placeholder="" required></textarea>
-                                <small id="emailHelp" class="form-text text-muted"> Molim vas navedite:broj ljudi,datume dolaska i datume odlaska za rezervaciju</small>
-
-                            </div>
-                            <div id="dvCaptcha">
-                            </div>
-                            <input type="hidden" id="hfCaptcha" />
-                            <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
-                            <div class="alert alert-danger" role="alert" id="ReservationAlertMessage" style="display:@ViewBag.CapthaShowError" runat="server">
-                                Captcha validation is required.Captcha was not checked.Please try again.
-                            </div>
-                            <button type="submit" data-id="@Model.Apartment.Id" id="reservationSubmit" onclick="submitReservation()">Submit</button>
-                        </form>
-
-                    </dd>
-
+            
 
                     @section Scripts
 {
@@ -601,9 +424,12 @@
                         var ratingVal = $('#ratingHid').val();
                         var details = $('#reviewDetails').val();
                         var apID = $('#btnSubmitReview').data("id");
-                //empty input values at end
-               // var ratingVal=
-       // $("#tblStudent tbody tr").remove();
+
+                        if (ratingVal < 1) {
+                            $("#ratingValueDiv").addClass("has-error");
+                            $("#reviewErrorMessage").show();
+                            return;
+                        }
         $.ajax({
             type: 'POST',
             url: '@Url.Action("createApartmentReview")',

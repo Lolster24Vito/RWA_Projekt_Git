@@ -119,14 +119,14 @@ namespace RWADatabaseLibrary.Repository
             var ds = SqlHelper.ExecuteDataset(
              _connectionString,
              CommandType.StoredProcedure,
-             "dbo.GetApartmentStarRating",
+             "dbo.GetApartmentReviews",
              commandParameters.ToArray());
 
             var reviewList = new List<ApartmentReview>();
             foreach (DataRow row in ds.Tables[0].Rows)
             {
                 var ap = new ApartmentReview();
-                ap.Id = Convert.ToInt32(row["ID"]);
+                ap.Id = Convert.ToInt32(row["Id"]);
                 ap.Guid = Guid.Parse(row["Guid"].ToString());
                 ap.CreatedAt = Convert.ToDateTime(row["CreatedAt"]);
 
@@ -134,12 +134,27 @@ namespace RWADatabaseLibrary.Repository
                 ap.UserId = Convert.ToInt32(row["UserId"]);
                 ap.Details = row["Details"]?.ToString();
                 ap.Stars = Convert.ToInt32(row["Stars"]);
-                ap.Username = row["UserName"].ToString();
 
                 reviewList.Add(ap);
             }
             return reviewList;
         }
+        public int GetApartmentStarRating(int id)
+        {
+            var commandParameters = new List<SqlParameter>();
+            commandParameters.Add(new SqlParameter("@Id", id));
+            var ds = SqlHelper.ExecuteDataset(
+             _connectionString,
+             CommandType.StoredProcedure,
+             "dbo.GetApartmentStarRating",
+             commandParameters.ToArray());
+            int rating= Convert.ToInt32(ds.Tables[0].Rows[0]["StarRating"]);
+               
+
+            
+            return rating;
+        }
+
         public void CreateApartmentReview(ApartmentReview apReview)
         {
             var commandParameters = new List<SqlParameter>();

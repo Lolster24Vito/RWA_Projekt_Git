@@ -24,7 +24,6 @@ namespace Javno.Controllers
         private CityRepository _cityRepository = new CityRepository();
         private UserRepository _userRepository = new UserRepository();
 
-        private bool firstTimeUse = false;
         // GET: Apartments
         public ActionResult Index()
         {
@@ -70,6 +69,10 @@ namespace Javno.Controllers
             //apartment repo
             string currentUserID=User.Identity.GetUserId();
             int currentUserIDInt=int.Parse(currentUserID);
+            if (rating < 1)
+            {
+                throw new Exception("Rating cannot be lower than 1");
+            }
             ApartmentReview apartmentReview = new ApartmentReview
             {
                 Guid = Guid.NewGuid(),
@@ -187,13 +190,24 @@ namespace Javno.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 currentUser = _userRepository.GetUser(int.Parse(User.Identity.GetUserId()));
-                viewModel.User = currentUser;
+                viewModel.UserName = currentUser.UserName;
+                viewModel.UserEmail = currentUser.Email;
+                viewModel.UserPhoneNumber = currentUser.PhoneNumber;
+                viewModel.UserAddress = currentUser.Address;
             }
 
             Apartment apartment = _apartmentRepository.GetApartment(id.Value);
             apartment.Tags = _apartmentRepository.GetApartmentTags(id.Value);
             apartment.ApartmentReviews = _apartmentRepository.GetApartmentReviews(id.Value);
+            for (int i = 0; i < apartment.ApartmentReviews.Count; i++)
+            {
+                apartment.ApartmentReviews[i].Username = _userRepository.GetUser(apartment.ApartmentReviews[i].UserId).UserName;
+
+            }
+
+           
             apartment.ApartmentPictures=_apartmentRepository.GetApartmentPicturesPublic(id.Value);
+            viewModel.Rating=_apartmentRepository.GetApartmentStarRating(id.Value);
 
             viewModel.Apartment = apartment;
            
