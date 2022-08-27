@@ -139,7 +139,7 @@ namespace RWADatabaseLibrary.Repository
             }
             return reviewList;
         }
-        public int GetApartmentStarRating(int id)
+        public int? GetApartmentStarRating(int id)
         {
             var commandParameters = new List<SqlParameter>();
             commandParameters.Add(new SqlParameter("@Id", id));
@@ -148,10 +148,12 @@ namespace RWADatabaseLibrary.Repository
              CommandType.StoredProcedure,
              "dbo.GetApartmentStarRating",
              commandParameters.ToArray());
-            int rating= Convert.ToInt32(ds.Tables[0].Rows[0]["StarRating"]);
-               
+            int? rating=
+           ds.Tables[0].Rows[0]["StarRating"] != DBNull.Value ?
+             (int?) Convert.ToInt32(ds.Tables[0].Rows[0]["StarRating"]) :
+             null;
 
-            
+
             return rating;
         }
 

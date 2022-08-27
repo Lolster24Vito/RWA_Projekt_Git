@@ -17,14 +17,37 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
     <!-- CUSTOM CSS -->
     <style>
+        html{
+            height:100%;
+        }
         body {
             padding-top: 90px;
-
+            height:100%;
             min-height:100vh;
-            margin-bottom:155px;
+           
         }
-        footer{
-        }
+        #ContentHolder {
+  min-height: 100%;
+}
+        #MainContent {
+  overflow:auto;
+  padding-bottom:150px; /* this needs to be bigger than footer height*/
+}
+
+       .footer {
+  position: relative;
+  margin-top: 100px; /* negative value of footer height */
+  height: 100px;
+  clear:both;
+  padding-top:20px;
+}
+
+       #headerContainer a{
+            color:#CCCCCC;
+       }
+        #headerContainer a:hover{
+            color:white;
+       }
     </style>
 
 </head>
@@ -50,8 +73,8 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #27285C;">
-            <div class="container">
+        <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #3D3D90;">
+            <div class="container" id="headerContainer">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="icon-bar"></span>
@@ -85,15 +108,15 @@
                 </div>
             </div>
         </nav>
-        <div class="container body-content " id="ContentHolder">
+        <div class="container clear-top " id="ContentHolder">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             <hr />
         </div>
 
-        <footer>
+        <footer class="footer">
 
-          <nav class="navbar navbar-inverse navbar-fixed-bottom" style="background-color: #5D5FDE;">
+          <nav class="navbar navbar-inverse" style="background-color: #5D5FDE; color:#CCCCCC">
             <div class="container">
                  <!--Grid row-->
                 <div class="row">

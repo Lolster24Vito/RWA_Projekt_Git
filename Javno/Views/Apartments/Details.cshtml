@@ -25,8 +25,8 @@
             .fa-star.selected {
                 color: #e2334c;
             }
-        #MainBody{
-            width:80%;
+        #ContentHolder {
+            width: 80%;
         }
         #RepImg{
             min-width:350px;
@@ -77,11 +77,11 @@
             <h1>
                 @Model.Apartment.Name
                         <div class="pull-right" id="ApartmentRatingsStars">
-                            @for (int i = 0; i < Model.Rating; i++)
+                            @for (int i = 0; i < Model.Rating.Value; i++)
                             {
                                 <i class='fa fa-star TitleStar'></i>
                             }
-                            @for (int i = Model.Rating; i < 5; i++)
+                            @for (int i = Model.Rating.Value; i < 5; i++)
                             {
                                 <i class='fa fa-star-o TitleStar'></i>
                             }
@@ -170,15 +170,18 @@
                     <small id="emailHelp" class="form-text text-muted"> Molim vas navedite:broj ljudi,datume dolaska i datume odlaska za rezervaciju</small>
 
                 </div>
-                <div id="dvCaptcha">
-                </div>
-                <input type="hidden" id="hfCaptcha" />
-                <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
-                <div class="alert alert-danger" role="alert" id="ReservationAlertMessage" style="display:@ViewBag.CapthaShowError" runat="server">
-                    Captcha validation is required.Captcha was not checked.Please try again.
-                </div>
-                <button type="submit" data-id="@Model.Apartment.Id" id="reservationSubmit" onclick="submitReservation()">Submit</button>
-            </form>
+                @if (String.IsNullOrWhiteSpace(User.Identity.Name))
+                {
+                    <div id="dvCaptcha">
+                    </div>
+                    <input type="hidden" id="hfCaptcha" />
+                    <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
+                    <div class="alert alert-danger" role="alert" id="ReservationAlertMessage" style="display:@ViewBag.CapthaShowError" runat="server">
+                        Captcha validation is required.Captcha was not checked.Please try again.
+                    </div>
+                }
+                    <button type="submit" data-id="@Model.Apartment.Id" id="reservationSubmit" onclick="submitReservation()">Submit</button>
+                </form>
 
         </div>
     </div>

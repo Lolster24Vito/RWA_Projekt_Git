@@ -13,7 +13,7 @@ namespace Javno.Models.ViewModels
         public string UserEmail { get; set; }
         public string UserPhoneNumber { get; set; }
         public string UserAddress { get; set; }
-        public int Rating { get; set; }
+        public int? Rating { get; set; }
 
     }
 }

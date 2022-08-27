@@ -9,22 +9,53 @@
     @Styles.Render("https://use.fontawesome.com/releases/v5.0.8/css/all.css")
     @Scripts.Render("~/bundles/modernizr")
     <link rel="stylesheet" href="~/Content/font-awesome.css" />
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            padding-top: 60px;
+            height: 100%;
+            min-height: 100vh;
+        }
+        #ContentHolder {
+            min-height: 98%;
+        }
+
+        #MainContent {
+            padding-bottom: 10px; /* this needs to be bigger than footer height*/
+        }
+
+        .footer {
+            position: relative;
+            margin-top:-155px; /* negative value of footer height */
+            height: 100px;
+            clear: both;
+            padding-top: 10px;
+        }
+    </style>
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #192841;">
+        <div class="container" id="headerContainer">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Apartment", new { area = "" }, new { @class = "navbar-brand" })
+                <a class="navbar-brand" style="padding: 0" runat="server" href="~/">
+                    <span>
+                        <img src="@Url.Content("~/Content/Images/logo.png") " style="height: 100%;" />
+                    </span>
+                    VITO-APARTMANI
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Apartment")</li>
+                    <li>@Html.ActionLink("Home", "Index", "Apartments")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
@@ -32,13 +63,70 @@
             </div>
         </div>
     </div>
-    <div class="container" id="MainBody">
-        @RenderBody()
+    <div class="container clear-top" id="ContentHolder">
+        <div id="MainContent">
+
+            @RenderBody()
+        </div>
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+
     </div>
+    <footer class="footer">
+
+        <nav class="navbar navbar-inverse" style="background-color: #5D5FDE; color:#CCCCCC">
+            <div class="container">
+                <!--Grid row-->
+                <div class="row">
+
+
+                    <!--Grid column-->
+                    <div class="col col-md-12 mb-4 mb-md-0">
+
+                        <h5 class="text-uppercase mb-4">
+                            <span>
+                                <img src="@Url.Content("~/Content/Images/logo.png")" height="45px" />
+
+                            </span>
+                            About company
+                        </h5>
+
+                        <p>
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
+                            voluptatum deleniti atque corrupti.
+                        </p>
+
+                        <p>
+                            Blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas
+                            molestias.
+                        </p>
+
+                        <div class="mt-4">
+                            <!-- Facebook -->
+                            <a type="button" class="btn btn-floating btn-warning btn-lg" href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                            <!-- Twitter -->
+                            <a type="button" class="btn btn-floating btn-warning btn-lg" href="https://twitter.com/Lolster24"><i class="fab fa-twitter"></i></a>
+                            <!-- Google + -->
+                            <a type="button" class="btn btn-floating btn-warning btn-lg" href="https://www.youtube.com/user/vitotito12/videos"><i class="fab fa-youtube"></i></a>
+                            <a type="button" class="btn btn-floating btn-warning btn-lg" href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+                            <a type="button" class="btn btn-floating btn-warning btn-lg" href="https://www.bluetooth.com/"><i class="fab fa-bluetooth"></i></a>
+                            <!-- Linkedin -->
+                        </div>
+                    </div>
+                    <!--Grid column-->
+
+
+
+
+                </div>
+                <!--Grid row-->
+
+            </div>
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                &copy; @DateTime.Now.Year - COPYRIGHT VITO APARTMANI
+            </div>
+        </nav>
+
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

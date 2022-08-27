@@ -17,6 +17,7 @@ using System.IO;
 
 namespace Javno.Controllers
 {
+    [HandleError]
     public class ApartmentsController : Controller
     {
         private ApartmentRepository _apartmentRepository = new ApartmentRepository();
@@ -24,9 +25,13 @@ namespace Javno.Controllers
         private CityRepository _cityRepository = new CityRepository();
         private UserRepository _userRepository = new UserRepository();
 
+
+
+
         // GET: Apartments
         public ActionResult Index()
         {
+
             SearchFiltersViewModel searchFiltersViewModel = new SearchFiltersViewModel();
             searchFiltersViewModel.Cities = _cityRepository.GetCities();
 
@@ -169,7 +174,10 @@ namespace Javno.Controllers
 
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+               // return new HttpStatusCode(404, "Not a valid reqq.");
+
+               // return new HttpNotFoundResult("The color does not exist.");
+                throw new Exception("Uh oh Error 404 the page is not found :( ");
             }
 
             string captchaResponse = Request["g-recaptcha-response"];
@@ -207,7 +215,7 @@ namespace Javno.Controllers
 
            
             apartment.ApartmentPictures=_apartmentRepository.GetApartmentPicturesPublic(id.Value);
-            viewModel.Rating=_apartmentRepository.GetApartmentStarRating(id.Value);
+            viewModel.Rating = _apartmentRepository.GetApartmentStarRating(id.Value) != null ? _apartmentRepository.GetApartmentStarRating(id.Value) : -1;
 
             viewModel.Apartment = apartment;
            
