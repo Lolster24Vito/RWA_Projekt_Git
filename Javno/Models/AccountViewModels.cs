@@ -78,6 +78,7 @@ namespace Javno.Models
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
 
+        [Required]
         [Display(Name = "Address")]
         public string Address { get; set; }
 
