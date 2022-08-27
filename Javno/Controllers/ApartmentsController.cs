@@ -240,7 +240,7 @@ namespace Javno.Controllers
         {
             if (path == null || string.IsNullOrEmpty(path))
                 return Content(content: "File missing"); // Rješenje "nabrzaka", nije najbolje
-
+            path = Path.GetFileName(path);
             // Popravi putanju do slike, u bazi nije cijela putanja!
 
             string basedir = AppDomain.CurrentDomain.BaseDirectory;

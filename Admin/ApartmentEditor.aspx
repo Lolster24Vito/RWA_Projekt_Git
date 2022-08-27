@@ -181,7 +181,7 @@
                                 <asp:HiddenField runat="server" ID="hidApartmentPictureId" Value='<%# Eval("ID") %>' />
                                 <div class="col-md-3">
                                     <a href="<%# Eval("Path") %>">
-                                        <asp:Image ID="imgApartmentPicture" runat="server" CssClass="img-thumbnail" ImageUrl='<%# Eval("Path") %>' Width="320" Height="200" />
+                                        <asp:Image ID="imgApartmentPicture" runat="server" CssClass="img-thumbnail" ImageUrl='<%# Eval("Path") %>' Width="420px" />
                                     </a>
                                 </div>
                                 <div class="col-md-3">

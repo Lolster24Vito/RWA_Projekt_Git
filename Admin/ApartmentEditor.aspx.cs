@@ -3,6 +3,7 @@ using RWADatabaseLibrary.Models;
 using RWADatabaseLibrary.Repository;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -178,6 +179,9 @@ namespace Admin
         {
             var files = SaveUploadedImagesToDisk();
             var apartmentPictures=files.Select(x=>ApartmentPicture.CreateApartmentFromPath(x.Path,x.Base64)).ToList();
+
+
+
             bool isNewApartment = (Request.QueryString["id"] == null);
 
             Apartment apartment = new Apartment() ;
@@ -206,19 +210,31 @@ namespace Admin
             if (isNewApartment)
             {
                 apartment.ApartmentPictures = apartmentPictures;
+                if (apartmentPictures.Count > 0 && !apartmentPictures.Any(ap => ap.IsRepresentative))
+                {
+
+                    apartmentPictures.FirstOrDefault().IsRepresentative = true;
+                }
                 _apartmentRepository.CreateApartment(apartment);
                 foreach (var item in files)
                 {
                     _apartmentRepository.SetApartmentPictureBase64(item.Path, item.Base64);
                 }
-                Response.Redirect($"ApartmentList.aspx");
+
+                var returnUrl = Request.QueryString["ReturnURL"];
+                if (string.IsNullOrEmpty(returnUrl))
+                {
+                    returnUrl = "~/";
+                }
+                Response.Redirect(returnUrl);
+                //Response.Redirect($"ApartmentList.aspx");
             }
             else
             {
                 apartment.Id = int.Parse(Request.QueryString["id"]);
-                apartment.ApartmentPictures = _apartmentRepository.GetApartmentPictures(apartment.Id);
+                //apartment.ApartmentPictures = _apartmentRepository.GetApartmentPictures(apartment.Id);
                 apartment.ApartmentPictures.AddRange(apartmentPictures);
-
+              //  SetIsRepresentative();
 
                 _apartmentRepository.UpdateApartment(apartment);
                 foreach (var pic in apartmentPictures)
@@ -315,7 +331,23 @@ namespace Admin
             Response.Redirect("ApartmentList.aspx");
 
         }
+        private bool SetIsRepresentative()
+        {
+            foreach (RepeaterItem item in repApartmentPictures.Items)
+            {
+                CheckBox chk = item.FindControl("cbIsRepresentative") as CheckBox;
+                if (chk.Checked)
+                {
+                    Debug.WriteLine("Truee");
+                }
+                else
+                {
+                    Debug.WriteLine("Falsee");
 
+                }
+            }
+            return true;
+        }
         private List<PicData> SaveUploadedImagesToDisk()
         {
 
