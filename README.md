@@ -1,5 +1,5 @@
 # RWA_Projekt_Git
-A asp.net project for apartments that has a admin project, a public project for users and a DAL project for getting data
+A asp.net project for apartments that has a admin project, a public project for users and a DAL project for getting data  
 Admin username and password:123
 Public website
 ![Screenshot](https://user-images.githubusercontent.com/56339547/200182989-6917ecd7-0c40-4103-9b2d-e6756e08e3cd.PNG)
