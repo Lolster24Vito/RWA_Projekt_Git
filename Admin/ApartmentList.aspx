@@ -22,8 +22,10 @@
             <asp:BoundField DataField="OwnerName" HeaderText="Vlasnik" />
             <asp:BoundField DataField="StatusName" HeaderText="Status" />
             <asp:TemplateField HeaderText="">
-                <ItemTemplate>
-                    <asp:HyperLink ID="hlReservation" runat="server" CssClass="btn btn-warning" Text="Rezerviraj" Visible='<%# Eval("StatusId").ToString()=="1"||Eval("StatusId").ToString()=="2"?true:false%>' NavigateUrl='<%# Eval("Id", "ApartmentReservationAdd.aspx?Id={0}") %>'></asp:HyperLink>
+
+                <ItemTemplate>  <!-- todo fix this if 1 and 2 status true -->
+
+                    <asp:HyperLink ID="hlReservation" runat="server" CssClass="btn btn-warning" Text="Rezerviraj" Visible='<%# (Convert.ToInt32(Eval("StatusId")).Equals(3))%>' NavigateUrl='<%# Eval("Id", "ApartmentReservationAdd.aspx?Id={0}") %>'></asp:HyperLink>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="">

@@ -33,7 +33,7 @@ namespace Admin
                         id = null;
                     Response.Redirect("ApartmentList.aspx");
                     }
-                        if (apartment.StatusId == 3) Response.Redirect("ApartmentList.aspx");
+                        if (apartment.StatusId != 3) Response.Redirect("ApartmentList.aspx");
                     lApartmentName.InnerText = apartment.Name;
                     RebindUsers();
                 }

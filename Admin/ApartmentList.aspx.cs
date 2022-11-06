@@ -40,7 +40,7 @@ namespace Admin
             }
         }
 
-        protected void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
+        public void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
             RebindApartments();
             FormToCookie();

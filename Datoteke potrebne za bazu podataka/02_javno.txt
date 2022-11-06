@@ -1,0 +1,165 @@
+CREATE OR ALTER PROCEDURE PROCEDURE [dbo].[SearchApartments]
+	@rooms int = null,
+	@adults int = null,
+	@children int = null,
+	@destination int = null,
+	@order int = null
+AS
+
+	SELECT
+		a.Id,
+		a.[Name],
+		StarRating = (
+			SELECT avg(Stars) 
+			FROM ApartmentReview ar 
+			WHERE ar.ApartmentId = a.Id),
+		CityName = (select TOP 1 cit.Name FROM dbo.City cit 
+		where cit.Id=a.CityId),
+		BeachDistance,
+		TotalRooms,
+		MaxAdults,
+		MaxChildren,
+		Price,
+		RepresentativePicturePath = (
+			SELECT TOP 1 ap.[Path]
+			FROM dbo.ApartmentPicture ap
+			WHERE ap.ApartmentId = a.Id
+			ORDER BY ap.IsRepresentative DESC, Id),
+		RepresentativePictureBytes = (
+			SELECT TOP 1 ap.[Base64Content]
+			FROM dbo.ApartmentPicture ap
+			WHERE ap.ApartmentId = a.Id
+			ORD	@rooms int = null,
+	@adults int = null,
+	@children int = null,
+	@destination int = null,
+	@order int = null
+AS
+
+	SELECT
+		a.Id,
+		a.[Name],
+		StarRating = (
+			SELECT avg(Stars) 
+			FROM ApartmentReview ar 
+			WHERE ar.ApartmentId = a.Id),
+		CityName = (select TOP 1 cit.Name FROM dbo.City cit 
+		where cit.Id=a.CityId),
+		BeachDistance,
+		TotalRooms,
+		MaxAdults,
+		MaxChildren,
+		Price,
+		RepresentativePicturePath = (
+			SELECT TOP 1 ap.[Path]
+			FROM dbo.ApartmentPicture ap
+			WHERE ap.ApartmentId = a.Id
+			ORDER BY ap.IsRepresentative DESC, Id),
+		RepresentativePictureBytes = (
+			SELECT TOP 1 ap.[Base64Content]
+			FROM dbo.ApartmentPicture ap
+			WHERE ap.ApartmentId = a.Id
+			ORDER BY ap.IsRepresentative DESC, Id)			
+		--TagId = t.Id,
+		--TagName = t.[Name]
+	FROM 
+		dbo.Apartment a
+		--JOIN City c ON c.Id = a.CityId
+		 --JOIN dbo.ApartmentPicture ap ON ap.ApartmentId = a.Id
+		--JOIN TaggedApartment ta ON ta.ApartmentId = a.Id
+		--JOIN Tag t ON t.Id = ta.TagId
+	WHERE 
+		(@rooms IS NULL OR @rooms IS NOT NULL AND a.TotalRooms >= @rooms)
+		AND 
+		(@adults IS NULL OR @adults IS NOT NULL AND a.MaxAdults >= @adults)
+		AND 
+		(@children IS NULL OR @children IS NOT NULL AND a.MaxChildren >= @children)
+		AND 
+		(@destination IS NULL OR @destination IS NOT NULL AND a.CityId = @destination)
+		AND
+		a.DeletedAt IS NULL
+		AND StatusId=3
+	ORDER BY 
+        (CASE
+            WHEN @order is null THEN a.Id
+            WHEN @order = 0 THEN a.Id
+            WHEN @order = 1 THEN Price
+        END)ASC,
+		( CASE
+            WHEN @order = 2 THEN Price end)DESC
+
+
+
+
+
+GO
+
+CREATE OR ALTER proc [dbo].SetApartmentPictureBase64
+	@path nvarchar(250),
+	@base64 nvarchar(max)
+as
+UPDATE [RwaApartmani].[dbo].ApartmentPicture
+SET [Base64Content]=@base64
+ where [Path]=@path
+
+
+GO
+
+
+CREATE OR ALTER   PROCEDURE [dbo].[GetApartmentStarRating]
+	@ApartmentId int = null
+AS
+SELECT 
+StarsAverage = (
+			SELECT avg(Stars) 
+			FROM ApartmentReview ar 
+			WHERE ar.ApartmentId = @ApartmentId),
+			ar.UserId,
+			ar.Details,
+			ar.Stars,
+			ar.CreatedAt,
+			ar.Id,
+			ar.[Guid]
+from ApartmentReview ar
+where ar.ApartmentId=@ApartmentId
+
+
+
+GO 
+ CREATE OR ALTER procedure [dbo].[CreateApartmentReview]
+    @guid uniqueidentifier,
+	@ApartmentId int,
+	@UserId int,
+	@Details nvarchar(1000),
+	@Stars int
+as
+Insert into [dbo].[ApartmentReview](Guid,ApartmentId,UserId,Details,CreatedAt,Stars)
+Values(@guid,@ApartmentId,@UserId,@Details,SYSUTCDATETIME(),@Stars)
+
+GO
+
+
+CREATE OR ALTER   PROCEDURE [dbo].[GetApartmentPicturesPublic]
+	@apartmentId int
+AS
+	SELECT 
+		  Id,
+		  [Guid],
+		  [Name],
+		  [Path],
+		  IsRepresentative,
+		  Base64Content
+	FROM dbo.ApartmentPicture
+	WHERE ApartmentId = @apartmentId AND DeletedAt IS NULL
+	ORDER BY IsRepresentative DESC, [Name] ASC
+
+GO
+
+CREATE OR ALTER PROCEDURE GetApartmentStarRating
+	@id int = null
+AS
+			SELECT StarRating=avg(Stars) 
+			FROM ApartmentReview ar 
+			WHERE ar.ApartmentId = @id
+
+GO

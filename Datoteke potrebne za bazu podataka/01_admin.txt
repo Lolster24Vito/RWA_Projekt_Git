@@ -1,0 +1,220 @@
+
+CREATE OR ALTER   PROCEDURE [dbo].[GetUsers]
+AS
+	SELECT [Id]
+      ,[Guid]
+      ,[CreatedAt]
+      ,[DeletedAt]
+      ,[Email]
+      ,[EmailConfirmed]
+      ,[PasswordHash]
+      ,[SecurityStamp]
+      ,[PhoneNumber]
+      ,[PhoneNumberConfirmed]
+      ,[LockoutEndDateUtc]
+      ,[LockoutEnabled]
+      ,[AccessFailedCount]
+      ,[UserName]
+      ,[Address]
+  FROM [RwaApartmani].[dbo].[AspNetUsers]
+GO
+
+
+
+CREATE OR ALTER   PROCEDURE [dbo].[UpdateApartment]
+	@id int,
+	@guid uniqueidentifier,
+	@ownerId int,
+	@typeId int,
+	@statusId int,
+	@cityId int,
+	@address nvarchar(250),
+	@name nvarchar(250),
+	@price money,
+	@maxAdults int,
+	@maxChildren int,
+	@totalRooms int,
+	@beachDistance int,
+	@tags KeyList READONLY,
+	@pictures PictureList READONLY
+AS
+
+	
+	DECLARE @Output KeyList
+
+	UPDATE dbo.Apartment
+	SET 
+		[Guid] = @guid,
+		OwnerId = @ownerId,
+		TypeId = @typeId,
+		StatusId = @statusId,
+		CityId = @cityId,
+		[Address] = @address,
+		[Name] = @name,
+		Price = @price,
+		MaxAdults = @maxAdults,
+		MaxChildren = @maxChildren,
+		TotalRooms = @totalRooms,
+		BeachDistance = @beachDistance
+	WHERE id = @id;
+
+	DELETE from dbo.TaggedApartment WHERE ApartmentId=@id
+
+/* Profa vi nemate pojma koliko ste me namucili sa vasom neradecom update procedurom >:(
+*/
+
+	MERGE dbo.TaggedApartment AS tgt
+	USING @tags AS src
+	ON (tgt.Id = src.[Key]) 
+	WHEN NOT MATCHED BY TARGET THEN
+		INSERT (ApartmentId, TagId)
+		VALUES (@id, [Key]);
+
+
+
+/* I ovo se sve resetira kad se promijeni tag ili ijedna slika*/
+	DELETE from dbo.ApartmentPicture  WHERE ApartmentId=@id
+
+	INSERT INTO ApartmentPicture(ApartmentId, [Path], [Name], IsRepresentative)
+	select @id,p.[path],p.[Name],p.IsRepresentative from @pictures as p
+
+	/*MERGE dbo.ApartmentPicture AS pic
+	USING @pictures AS src
+	ON (pic.Id = src.Id) 
+	WHEN MATCHED THEN
+		UPDATE SET 
+			[Name] = src.[Name],
+			IsRepresentative = src.IsRepresentative
+	WHEN NOT MATCHED BY TARGET THEN
+		INSERT (ApartmentId, [Path], [Name], IsRepresentative)
+		VALUES (@id, [Path], [Name], IsRepresentative);*/
+
+
+
+
+GO
+
+Create OR ALTER procedure [dbo].[GetTag]
+	@id int = null
+as
+select * from Tag where Id=@id
+GO
+
+
+
+
+Create OR ALTER procedure [dbo].[DeleteTag]
+	@id int = null
+as
+delete from Tag where Id=@id
+GO
+
+
+
+Create OR ALTER procedure [dbo].[GetTagTypes]
+as
+select * From TagType 
+
+
+
+
+
+GO
+Create OR ALTER procedure [dbo].[CreateTag]
+    @guid uniqueidentifier,
+	@name nvarchar(250),
+	@nameEng nvarchar(250),
+	@TypeId int
+as
+Insert into dbo.Tag(Guid,Name,NameEng,TypeId,CreatedAt)
+Values(@guid,@name,@nameEng,@TypeId,SYSUTCDATETIME())
+
+GO
+
+  Create OR ALTER procedure [dbo].[CreateApartmentReservation]
+    @guid uniqueidentifier,
+	@apartmentId int,
+	@Details nvarchar(1000),
+	@userid int,
+	@username nvarchar(250),
+	@userEmail nvarchar(250),
+	@userPhone nvarchar(250),
+	@userAddress nvarchar(250)
+as
+Insert into dbo.ApartmentReservation(Guid,CreatedAt,ApartmentId,Details,UserId,UserName,UserEmail,UserPhone,UserAddress)
+Values(@guid,SYSUTCDATETIME(),@apartmentId,@Details,@userid,@username,@useremail,@userphone,@userAddress)
+
+GO
+
+
+create OR ALTER proc GetApartmentReservation
+	@apartmentId int
+	as
+
+  select *
+  from [dbo].[ApartmentReservation]
+  where  ApartmentId=@apartmentId
+
+GO
+
+create OR ALTER proc [dbo].[GetUser]
+	@userId int
+as
+SELECT *
+  FROM [RwaApartmani].[dbo].[AspNetUsers]
+  where Id=@userId
+
+GO
+
+Create or ALTER   PROCEDURE [dbo].[GetApartments]
+	@statusId int = null,
+	@cityId int = null,
+	@order int = null
+AS
+	SELECT 
+		  a.Id,
+		  a.[Guid],
+		  a.CreatedAt,
+		  DeletedAt,
+		  OwnerId,
+		  OwnerName = ao.[Name],
+		  TypeId,
+		  StatusId,
+		  StatusName = ast.[Name],
+		  CityId,
+		  CityName = c.[Name],
+		  [Address],
+		  a.[Name],
+		  a.NameEng,
+		  Price,
+		  MaxAdults,
+		  MaxChildren,
+		  TotalRooms,
+		  BeachDistance
+	FROM 
+		dbo.Apartment a
+		JOIN dbo.ApartmentOwner ao ON ao.Id = a.OwnerId
+		JOIN dbo.ApartmentStatus ast ON ast.Id = a.StatusId
+		JOIN dbo.City c ON c.Id = a.CityId
+	WHERE
+		(@statusId IS NULL OR @statusId IS NOT NULL AND StatusId = @statusId)
+		AND
+		(@cityId IS NULL OR @cityId IS NOT NULL AND CityId = @cityId)
+		AND
+		DeletedAt IS NULL
+	ORDER BY 
+        (CASE
+            WHEN @order is null THEN a.Id
+            WHEN @order = 1 THEN TotalRooms
+            WHEN @order = 2 THEN MaxAdults
+            WHEN @order = 3 THEN MaxChildren
+            WHEN @order = 4 THEN Price
+        END)ASC,
+		( CASE
+		    WHEN @order = 11 THEN TotalRooms
+            WHEN @order = 22 THEN MaxAdults
+            WHEN @order = 33 THEN MaxChildren
+            WHEN @order = 44 THEN Price end)DESC
+
+
+GO
